@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abhinav - Senior Data Engineer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0e17;
+            --bg-secondary: #131824;
+            --bg-card: #1a1f2e;
+            --accent-primary: #00d9ff;
+            --accent-secondary: #00ff88;
+            --text-primary: #e8eaed;
+            --text-secondary: #9ca3af;
+            --text-tertiary: #6b7280;
+            --border: #2d3748;
+            --gradient-1: linear-gradient(135deg, #00d9ff 0%, #0066ff 100%);
+            --gradient-2: linear-gradient(135deg, #00ff88 0%, #00d9ff 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated background grid */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 217, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 217, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: 0;
+            pointer-events: none;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header */
+        header {
+            padding: 3rem 0;
+            border-bottom: 1px solid var(--border);
+            background: rgba(10, 14, 23, 0.8);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            animation: slideDown 0.6s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .logo {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.02em;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-primary);
+            transition: width 0.3s ease;
+        }
+
+        nav a:hover {
+            color: var(--accent-primary);
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 6rem 0;
+            position: relative;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-tag {
+            display: inline-block;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875rem;
+            color: var(--accent-secondary);
+            background: rgba(0, 255, 136, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            margin-bottom: 2rem;
+        }
+
+        h1 {
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+            letter-spacing: -0.03em;
+        }
+
+        h1 .highlight {
+            background: var(--gradient-2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin-bottom: 2.5rem;
+            line-height: 1.7;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-block;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: var(--gradient-1);
+            color: white;
+            border: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 217, 255, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-primary);
+            border: 2px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+            transform: translateY(-2px);
+        }
+
+        /* Section Styling */
+        section {
+            padding: 5rem 0;
+            animation: fadeInUp 0.8s ease-out both;
+        }
+
+        section:nth-child(even) {
+            animation-delay: 0.1s;
+        }
+
+        .section-header {
+            margin-bottom: 3rem;
+        }
+
+        .section-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875rem;
+            color: var(--accent-primary);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+        }
+
+        .section-description {
+            color: var(--text-secondary);
+            font-size: 1.125rem;
+            max-width: 700px;
+        }
+
+        /* Skills Grid */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .skill-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .skill-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient-1);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .skill-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-primary);
+        }
+
+        .skill-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .skill-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .skill-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+        }
+
+        .skill-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .skill-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            background: rgba(0, 217, 255, 0.1);
+            color: var(--accent-primary);
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            border: 1px solid rgba(0, 217, 255, 0.2);
+        }
+
+        /* Project Cards */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .project-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .project-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border-color: var(--accent-primary);
+        }
+
+        .project-header {
+            padding: 2rem;
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-card) 100%);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .project-number {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875rem;
+            color: var(--accent-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .project-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+        }
+
+        .project-type {
+            font-size: 0.875rem;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .project-content {
+            padding: 2rem;
+        }
+
+        .project-description {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .project-tech {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .tech-badge {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            background: rgba(0, 255, 136, 0.1);
+            color: var(--accent-secondary);
+            padding: 0.35rem 0.75rem;
+            border-radius: 6px;
+            border: 1px solid rgba(0, 255, 136, 0.2);
+        }
+
+        .project-highlights {
+            list-style: none;
+            margin-bottom: 1.5rem;
+        }
+
+        .project-highlights li {
+            color: var(--text-secondary);
+            padding-left: 1.5rem;
+            margin-bottom: 0.5rem;
+            position: relative;
+            font-size: 0.9rem;
+        }
+
+        .project-highlights li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--accent-primary);
+            font-weight: bold;
+        }
+
+        /* Contact Section */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .contact-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .contact-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-primary);
+        }
+
+        .contact-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .contact-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .contact-card a {
+            color: var(--accent-primary);
+            text-decoration: none;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+        }
+
+        .contact-card a:hover {
+            text-decoration: underline;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
+            padding: 3rem 0;
+            text-align: center;
+            margin-top: 5rem;
+        }
+
+        footer p {
+            color: var(--text-tertiary);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            h2 {
+                font-size: 2rem;
+            }
+
+            .header-content {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            nav ul {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero {
+                padding: 3rem 0;
+            }
+        }
+
+        /* Scroll animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease-out both;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">&lt;ABHINAV/&gt;</div>
+                <nav>
+                    <ul>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#skills">Skills</a></li>
+                        <li><a href="#projects">Projects</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container">
+                <span class="hero-tag">// Senior Data Engineer</span>
+                <h1>Building <span class="highlight">Data Pipelines</span><br>That Scale</h1>
+                <p class="hero-subtitle">
+                    Specializing in enterprise data platforms, cloud migrations, and complex ETL architectures. 
+                    Transforming raw data into actionable insights through Azure, Databricks, and modern data stack technologies.
+                </p>
+                <div class="cta-buttons">
+                    <a href="#projects" class="btn btn-primary">View Projects</a>
+                    <a href="#contact" class="btn btn-secondary">Get in Touch</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="about">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-tag">// About Me</span>
+                    <h2>Data Engineer & Cloud Architect</h2>
+                    <p class="section-description">
+                        Senior data engineer with extensive experience building enterprise-scale data platforms. 
+                        I specialize in Azure ecosystems, complex data migrations, and architecting solutions that handle 
+                        billions of records while maintaining performance and reliability. My work spans from database 
+                        optimization to full-stack data pipeline development.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section id="skills">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-tag">// Technical Expertise</span>
+                    <h2>Core Competencies</h2>
+                </div>
+                <div class="skills-grid">
+                    <div class="skill-card">
+                        <div class="skill-icon">☁️</div>
+                        <h3>Azure Cloud Platform</h3>
+                        <p>Expert in Azure Synapse Analytics, Data Factory, Databricks, and Microsoft Fabric for building scalable data solutions.</p>
+                        <div class="skill-tags">
+                            <span class="skill-tag">Synapse</span>
+                            <span class="skill-tag">ADF</span>
+                            <span class="skill-tag">Fabric</span>
+                            <span class="skill-tag">Databricks</span>
+                        </div>
+                    </div>
+
+                    <div class="skill-card">
+                        <div class="skill-icon">🗄️</div>
+                        <h3>Database Engineering</h3>
+                        <p>Advanced SQL Server development, stored procedures, performance tuning, and data warehousing best practices.</p>
+                        <div class="skill-tags">
+                            <span class="skill-tag">SQL Server</span>
+                            <span class="skill-tag">T-SQL</span>
+                            <span class="skill-tag">Stored Procs</span>
+                            <span class="skill-tag">DWH</span>
+                        </div>
+                    </div>
+
+                    <div class="skill-card">
+                        <div class="skill-icon">🔄</div>
+                        <h3>ETL & Data Pipelines</h3>
+                        <p>Designing and implementing complex ETL processes, data transformations, and real-time streaming solutions.</p>
+                        <div class="skill-tags">
+                            <span class="skill-tag">ETL</span>
+                            <span class="skill-tag">Data Factory</span>
+                            <span class="skill-tag">Orchestration</span>
+                            <span class="skill-tag">Streaming</span>
+                        </div>
+                    </div>
+
+                    <div class="skill-card">
+                        <div class="skill-icon">📊</div>
+                        <h3>Data Architecture</h3>
+                        <p>Enterprise data modeling, dimensional modeling, data lake architectures, and solution design for complex business requirements.</p>
+                        <div class="skill-tags">
+                            <span class="skill-tag">Data Modeling</span>
+                            <span class="skill-tag">Architecture</span>
+                            <span class="skill-tag">Delta Lake</span>
+                            <span class="skill-tag">Design</span>
+                        </div>
+                    </div>
+
+                    <div class="skill-card">
+                        <div class="skill-icon">⚡</div>
+                        <h3>Performance Optimization</h3>
+                        <p>Query optimization, indexing strategies, partition management, and system performance tuning at scale.</p>
+                        <div class="skill-tags">
+                            <span class="skill-tag">Optimization</span>
+                            <span class="skill-tag">Tuning</span>
+                            <span class="skill-tag">Indexing</span>
+                            <span class="skill-tag">Partitioning</span>
+                        </div>
+                    </div>
+
+                    <div class="skill-card">
+                        <div class="skill-icon">🔧</div>
+                        <h3>Additional Technologies</h3>
+                        <p>Snowflake, SAP BW, Python, PySpark, DevOps practices, and consulting across multiple cloud platforms.</p>
+                        <div class="skill-tags">
+                            <span class="skill-tag">Snowflake</span>
+                            <span class="skill-tag">Python</span>
+                            <span class="skill-tag">PySpark</span>
+                            <span class="skill-tag">SAP BW</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="projects">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-tag">// Portfolio</span>
+                    <h2>Featured Projects</h2>
+                    <p class="section-description">
+                        A selection of enterprise-scale projects demonstrating expertise in data engineering, 
+                        cloud migrations, and complex analytical solutions.
+                    </p>
+                </div>
+                <div class="projects-grid">
+                    <div class="project-card">
+                        <div class="project-header">
+                            <div class="project-number">PROJECT 01</div>
+                            <h3>Azure Synapse to Microsoft Fabric Migration</h3>
+                            <div class="project-type">Cloud Migration • Enterprise Scale</div>
+                        </div>
+                        <div class="project-content">
+                            <p class="project-description">
+                                Led comprehensive migration of enterprise data warehouse from Azure Synapse Analytics to Microsoft Fabric, 
+                                involving extensive SQL refactoring, syntax compatibility work, and system modernization.
+                            </p>
+                            <div class="project-tech">
+                                <span class="tech-badge">Microsoft Fabric</span>
+                                <span class="tech-badge">Azure Synapse</span>
+                                <span class="tech-badge">T-SQL</span>
+                                <span class="tech-badge">Migration</span>
+                            </div>
+                            <ul class="project-highlights">
+                                <li>Migrated 500+ stored procedures with syntax compatibility</li>
+                                <li>Refactored complex data warehouse operations</li>
+                                <li>Ensured zero downtime during transition</li>
+                                <li>Optimized performance for new platform</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="project-card">
+                        <div class="project-header">
+                            <div class="project-number">PROJECT 02</div>
+                            <h3>Equipment Maintenance KPI System</h3>
+                            <div class="project-type">Business Intelligence • Analytics</div>
+                        </div>
+                        <div class="project-content">
+                            <p class="project-description">
+                                Developed comprehensive stored procedures for equipment maintenance KPIs including callback rates, 
+                                sick unit percentages, MTBC calculations, and maintenance portfolio analytics.
+                            </p>
+                            <div class="project-tech">
+                                <span class="tech-badge">SQL Server</span>
+                                <span class="tech-badge">Stored Procedures</span>
+                                <span class="tech-badge">KPI Development</span>
+                                <span class="tech-badge">Analytics</span>
+                            </div>
+                            <ul class="project-highlights">
+                                <li>Implemented complex business logic for maintenance metrics</li>
+                                <li>Used CTEs and window functions for efficiency</li>
+                                <li>Created UNPIVOT operations for data transformation</li>
+                                <li>Delivered actionable insights for equipment management</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="project-card">
+                        <div class="project-header">
+                            <div class="project-number">PROJECT 03</div>
+                            <h3>Enterprise ETL Pipeline Architecture</h3>
+                            <div class="project-type">Data Engineering • Pipeline Development</div>
+                        </div>
+                        <div class="project-content">
+                            <p class="project-description">
+                                Architected and implemented end-to-end ETL pipelines using Azure Data Factory and Databricks 
+                                for processing millions of records daily from multiple source systems.
+                            </p>
+                            <div class="project-tech">
+                                <span class="tech-badge">Azure Data Factory</span>
+                                <span class="tech-badge">Databricks</span>
+                                <span class="tech-badge">Delta Lake</span>
+                                <span class="tech-badge">ETL</span>
+                            </div>
+                            <ul class="project-highlights">
+                                <li>Designed scalable data ingestion framework</li>
+                                <li>Implemented incremental load patterns</li>
+                                <li>Built error handling and retry mechanisms</li>
+                                <li>Achieved 99.9% pipeline reliability</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="project-card">
+                        <div class="project-header">
+                            <div class="project-number">PROJECT 04</div>
+                            <h3>SAP BW to Azure Data Migration</h3>
+                            <div class="project-type">Integration • Data Migration</div>
+                        </div>
+                        <div class="project-content">
+                            <p class="project-description">
+                                Executed large-scale data extraction from SAP BW systems and migration to Azure cloud platform, 
+                                including data validation, transformation, and loading processes.
+                            </p>
+                            <div class="project-tech">
+                                <span class="tech-badge">SAP BW</span>
+                                <span class="tech-badge">Azure</span>
+                                <span class="tech-badge">Data Migration</span>
+                                <span class="tech-badge">Integration</span>
+                            </div>
+                            <ul class="project-highlights">
+                                <li>Extracted data from complex SAP BW structures</li>
+                                <li>Designed efficient data loading strategies</li>
+                                <li>Implemented data quality validation framework</li>
+                                <li>Ensured data consistency across systems</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="project-card">
+                        <div class="project-header">
+                            <div class="project-number">PROJECT 05</div>
+                            <h3>Supply Chain Analytics Platform</h3>
+                            <div class="project-type">Data Warehousing • Analytics</div>
+                        </div>
+                        <div class="project-content">
+                            <p class="project-description">
+                                Built comprehensive data warehouse consolidating supply chain data across multiple enterprise systems, 
+                                enabling advanced analytics and reporting capabilities.
+                            </p>
+                            <div class="project-tech">
+                                <span class="tech-badge">Data Warehousing</span>
+                                <span class="tech-badge">SQL Server</span>
+                                <span class="tech-badge">Supply Chain</span>
+                                <span class="tech-badge">Analytics</span>
+                            </div>
+                            <ul class="project-highlights">
+                                <li>Consolidated data from 15+ source systems</li>
+                                <li>Implemented dimensional modeling best practices</li>
+                                <li>Created complex analytical stored procedures</li>
+                                <li>Enabled real-time supply chain visibility</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="project-card">
+                        <div class="project-header">
+                            <div class="project-number">PROJECT 06</div>
+                            <h3>Databricks Solution for Barclays</h3>
+                            <div class="project-type">Consulting • Solution Architecture</div>
+                        </div>
+                        <div class="project-content">
+                            <p class="project-description">
+                                Pitched and architected Databricks-based data platform solution for major banking client, 
+                                demonstrating ROI and technical feasibility for enterprise adoption.
+                            </p>
+                            <div class="project-tech">
+                                <span class="tech-badge">Databricks</span>
+                                <span class="tech-badge">Consulting</span>
+                                <span class="tech-badge">Financial Services</span>
+                                <span class="tech-badge">Architecture</span>
+                            </div>
+                            <ul class="project-highlights">
+                                <li>Designed scalable data lakehouse architecture</li>
+                                <li>Demonstrated advanced analytics capabilities</li>
+                                <li>Provided cost-benefit analysis and roadmap</li>
+                                <li>Addressed security and compliance requirements</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-tag">// Get In Touch</span>
+                    <h2>Let's Connect</h2>
+                    <p class="section-description">
+                        Interested in discussing data engineering projects, consulting opportunities, or just want to chat about data? 
+                        Feel free to reach out through any of these channels.
+                    </p>
+                </div>
+                <div class="contact-grid">
+                    <div class="contact-card">
+                        <div class="contact-icon">📧</div>
+                        <h3>Email</h3>
+                        <a href="mailto:your.email@example.com">your.email@example.com</a>
+                    </div>
+                    <div class="contact-card">
+                        <div class="contact-icon">💼</div>
+                        <h3>LinkedIn</h3>
+                        <a href="https://linkedin.com/in/yourprofile" target="_blank">linkedin.com/in/yourprofile</a>
+                    </div>
+                    <div class="contact-card">
+                        <div class="contact-icon">💻</div>
+                        <h3>GitHub</h3>
+                        <a href="https://github.com/yourusername" target="_blank">github.com/yourusername</a>
+                    </div>
+                    <div class="contact-card">
+                        <div class="contact-icon">🔗</div>
+                        <h3>Portfolio</h3>
+                        <a href="#" target="_blank">Download Resume (PDF)</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Abhinav - Senior Data Engineer. Built with dedication to data excellence.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add scroll animation observer
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all project cards and skill cards
+        document.querySelectorAll('.project-card, .skill-card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(card);
+        });
+    </script>
+</body>
+</html>
