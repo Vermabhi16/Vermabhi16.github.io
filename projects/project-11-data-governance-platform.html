@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enterprise Data Governance Platform - Abhinav Verma</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg-primary: #0a0e17; --bg-secondary: #131824; --bg-card: #1a1f2e; --accent-primary: #00d9ff; --accent-secondary: #00ff88; --text-primary: #e8eaed; --text-secondary: #9ca3af; --text-tertiary: #6b7280; --border: #2d3748; --gradient-1: linear-gradient(135deg, #00d9ff 0%, #0066ff 100%); --gradient-2: linear-gradient(135deg, #00ff88 0%, #00d9ff 100%); }
+        * { margin: 0; padding: 0; box-sizing: border-box; } body { font-family: 'Outfit', sans-serif; background: var(--bg-primary); color: var(--text-primary); line-height: 1.6; overflow-x: hidden; }
+        body::before { content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: linear-gradient(rgba(0, 217, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 217, 255, 0.03) 1px, transparent 1px); background-size: 50px 50px; z-index: 0; pointer-events: none; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; position: relative; z-index: 1; }
+        header { padding: 1.5rem 0; border-bottom: 1px solid var(--border); background: rgba(10, 14, 23, 0.95); backdrop-filter: blur(10px); position: sticky; top: 0; z-index: 100; }
+        .header-content { display: flex; justify-content: space-between; align-items: center; }
+        .back-link { display: flex; align-items: center; gap: 0.5rem; color: var(--accent-primary); text-decoration: none; font-weight: 500; transition: all 0.3s ease; }
+        .back-link:hover { gap: 0.75rem; } .logo { font-family: 'JetBrains Mono', monospace; font-size: 1.25rem; font-weight: 700; background: var(--gradient-1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .project-hero { padding: 4rem 0; border-bottom: 1px solid var(--border); } .project-meta { display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+        .project-tag { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; padding: 0.35rem 0.75rem; border-radius: 20px; background: rgba(0, 217, 255, 0.1); color: var(--accent-primary); border: 1px solid rgba(0, 217, 255, 0.3); }
+        .project-tag.industry { background: rgba(0, 255, 136, 0.1); color: var(--accent-secondary); border-color: rgba(0, 255, 136, 0.3); }
+        h1 { font-size: 3rem; font-weight: 700; margin-bottom: 1.5rem; line-height: 1.2; } h1 .highlight { background: var(--gradient-2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .project-intro { font-size: 1.25rem; color: var(--text-secondary); max-width: 800px; line-height: 1.8; }
+        .content-section { padding: 4rem 0; border-bottom: 1px solid var(--border); } .content-section:last-child { border-bottom: none; }
+        h2 { font-size: 1.75rem; margin-bottom: 1.5rem; color: var(--text-primary); } h2 .section-number { color: var(--accent-primary); font-family: 'JetBrains Mono', monospace; margin-right: 0.5rem; }
+        h3 { font-size: 1.25rem; margin: 2rem 0 1rem; color: var(--accent-secondary); } p { color: var(--text-secondary); margin-bottom: 1rem; line-height: 1.8; }
+        .architecture-diagram { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 2rem; margin: 2rem 0; overflow-x: auto; }
+        .architecture-diagram pre { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--accent-primary); line-height: 1.4; margin: 0; }
+        .tech-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 2rem 0; }
+        .tech-item { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem; transition: all 0.3s ease; }
+        .tech-item:hover { border-color: var(--accent-primary); transform: translateY(-2px); }
+        .tech-item h4 { font-size: 0.875rem; color: var(--accent-secondary); margin-bottom: 0.5rem; font-family: 'JetBrains Mono', monospace; } .tech-item p { font-size: 0.9rem; margin: 0; }
+        ul { list-style: none; margin: 1rem 0; } ul li { color: var(--text-secondary); padding-left: 1.5rem; margin-bottom: 0.75rem; position: relative; }
+        ul li::before { content: '>'; position: absolute; left: 0; color: var(--accent-primary); font-family: 'JetBrains Mono', monospace; font-weight: bold; }
+        .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1.5rem; margin: 2rem 0; }
+        .metric-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; text-align: center; }
+        .metric-value { font-size: 2.5rem; font-weight: 700; background: var(--gradient-2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-family: 'JetBrains Mono', monospace; }
+        .metric-label { font-size: 0.875rem; color: var(--text-tertiary); margin-top: 0.5rem; }
+        .code-block { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; margin: 1.5rem 0; overflow-x: auto; }
+        .code-block code { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: var(--text-primary); }
+        .code-label { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--accent-secondary); margin-bottom: 0.75rem; display: block; }
+        footer { background: var(--bg-secondary); border-top: 1px solid var(--border); padding: 2rem 0; text-align: center; margin-top: 4rem; }
+        footer p { color: var(--text-tertiary); font-size: 0.9rem; margin: 0; }
+        @media (max-width: 768px) { h1 { font-size: 2rem; } .architecture-diagram pre { font-size: 0.55rem; } .metric-value { font-size: 2rem; } }
+    </style>
+</head>
+<body>
+    <header><div class="container"><div class="header-content"><a href="../index.html" class="back-link"><span>&larr;</span> Back to Portfolio</a><div class="logo">&lt;ABHINAV/&gt;</div></div></div></header>
+    <main>
+        <section class="project-hero">
+            <div class="container">
+                <div class="project-meta">
+                    <span class="project-tag">Unity Catalog</span>
+                    <span class="project-tag">Purview</span>
+                    <span class="project-tag">Governance</span>
+                    <span class="project-tag industry">Global Banking</span>
+                </div>
+                <h1>Enterprise <span class="highlight">Data Governance Platform</span></h1>
+                <p class="project-intro">
+                    Implemented a comprehensive data governance platform for a global bank, establishing
+                    unified data catalog, lineage tracking, access controls, and compliance monitoring
+                    across 500+ data assets. The platform supports GDPR, BCBS 239, and SOX compliance
+                    requirements with automated policy enforcement.
+                </p>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="container">
+                <h2><span class="section-number">01</span> Business Challenge</h2>
+                <ul>
+                    <li>Regulatory audits requiring complete data lineage for risk calculations</li>
+                    <li>No centralized view of data assets across 200+ source systems</li>
+                    <li>Manual access management creating security vulnerabilities</li>
+                    <li>PII data scattered without proper classification or masking</li>
+                    <li>GDPR data subject requests taking weeks to fulfill</li>
+                    <li>Lack of data quality metrics for regulatory reporting</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="container">
+                <h2><span class="section-number">02</span> Solution Architecture</h2>
+                <div class="architecture-diagram">
+                    <pre>
++--------------------------------------------------------------------------------------------------------------+
+|                                    DATA GOVERNANCE PLATFORM                                                   |
++--------------------------------------------------------------------------------------------------------------+
+|                                                                                                               |
+|  DATA CATALOG                          ACCESS CONTROL                        DATA LINEAGE                    |
+|  +------------------------+            +------------------------+            +------------------------+      |
+|  | UNITY CATALOG          |            | ATTRIBUTE-BASED        |            | AUTOMATED LINEAGE      |      |
+|  | - Business Glossary    |            | ACCESS CONTROL         |            | TRACKING               |      |
+|  | - Technical Metadata   |            |                        |            |                        |      |
+|  | - Data Classification  |            | +------------------+   |            | +------------------+   |      |
+|  | - Search & Discovery   |<---------->| | Policies         |   |<---------->| | Spark Lineage    |   |      |
+|  +------------------------+            | | - Role-based     |   |            | | - Column-level   |   |      |
+|            |                           | | - Tag-based      |   |            | | - End-to-end     |   |      |
+|            v                           | | - Row-level      |   |            | +------------------+   |      |
+|  +------------------------+            | +------------------+   |            | +------------------+   |      |
+|  | AZURE PURVIEW          |            | +------------------+   |            | | SQL Lineage      |   |      |
+|  | - Cross-platform scan  |            | | Dynamic Masking  |   |            | | - View deps      |   |      |
+|  | - Sensitivity labels   |            | | - PII Masking    |   |            | | - SP analysis    |   |      |
+|  | - Data Map             |            | | - Tokenization   |   |            | +------------------+   |      |
+|  +------------------------+            | +------------------+   |            +------------------------+      |
+|                                        +------------------------+                                            |
+|                                                                                                               |
+|  DATA QUALITY                          COMPLIANCE MONITORING                 POLICY AUTOMATION               |
+|  +------------------------+            +------------------------+            +------------------------+      |
+|  | QUALITY FRAMEWORK      |            | REGULATORY DASHBOARD   |            | POLICY-AS-CODE         |      |
+|  | +------------------+   |            | +------------------+   |            | +------------------+   |      |
+|  | | Great Expectations|  |            | | GDPR Compliance  |   |            | | OPA/Rego         |   |      |
+|  | | - Data Profiling  |  |            | | - DSR Tracking   |   |            | | - Access Rules   |   |      |
+|  | | - Validation      |  |            | | - Consent Mgmt   |   |            | | - Classification |   |      |
+|  | +------------------+   |            | +------------------+   |            | +------------------+   |      |
+|  | +------------------+   |            | +------------------+   |            | +------------------+   |      |
+|  | | Soda Core        |   |            | | BCBS 239         |   |            | | Terraform        |   |      |
+|  | | - SLO Monitoring  |  |            | | - Data Accuracy  |   |            | | - RBAC Provision |   |      |
+|  | | - Alerting        |  |            | | - Timeliness     |   |            | | - Audit Trails   |   |      |
+|  | +------------------+   |            | +------------------+   |            | +------------------+   |      |
+|  +------------------------+            +------------------------+            +------------------------+      |
+|                                                                                                               |
+|  STEWARDSHIP WORKFLOW                                                                                        |
+|  +------------------------+  +------------------------+  +------------------------+                         |
+|  | Data Steward Portal    |  | Issue Management       |  | Certification Workflow |                         |
+|  | - Business Definitions |  | - Data Quality Issues  |  | - Dataset Certification|                         |
+|  | - Owner Assignment     |  | - Escalation Paths     |  | - Approval Workflow    |                         |
+|  +------------------------+  +------------------------+  +------------------------+                         |
+|                                                                                                               |
++--------------------------------------------------------------------------------------------------------------+
+                    </pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="container">
+                <h2><span class="section-number">03</span> Technical Implementation</h2>
+                <h3>Unity Catalog Configuration</h3>
+                <div class="code-block">
+                    <span class="code-label">// Terraform - Unity Catalog Governance Setup</span>
+                    <code><pre>
+resource "databricks_catalog" "finance" {
+  name    = "finance"
+  comment = "Finance domain data catalog"
+  owner   = "finance-data-team@bank.com"
+  properties = {
+    domain          = "finance"
+    classification  = "confidential"
+    data_steward    = "john.smith@bank.com"
+  }
+}
+
+resource "databricks_grants" "finance_catalog" {
+  catalog = databricks_catalog.finance.name
+  grant {
+    principal  = "finance-analysts"
+    privileges = ["USE_CATALOG", "USE_SCHEMA", "SELECT"]
+  }
+  grant {
+    principal  = "finance-engineers"
+    privileges = ["USE_CATALOG", "USE_SCHEMA", "SELECT", "MODIFY", "CREATE_TABLE"]
+  }
+}
+
+# Row-level security
+resource "databricks_sql_table" "transactions" {
+  catalog_name = "finance"
+  schema_name  = "banking"
+  name         = "transactions"
+
+  column {
+    name = "customer_id"
+    type = "STRING"
+    mask { function_name = "mask_pii" }
+  }
+}</pre></code>
+                </div>
+
+                <h3>Automated PII Classification</h3>
+                <div class="code-block">
+                    <span class="code-label">// Python - PII Detection and Classification</span>
+                    <code><pre>
+from presidio_analyzer import AnalyzerEngine
+from databricks.sdk import WorkspaceClient
+
+analyzer = AnalyzerEngine()
+w = WorkspaceClient()
+
+def classify_table(catalog: str, schema: str, table: str):
+    """Scan table columns and apply sensitivity tags"""
+    df = spark.table(f"{catalog}.{schema}.{table}")
+
+    pii_columns = []
+    for col in df.columns:
+        sample = df.select(col).limit(1000).toPandas()[col].dropna()
+        for value in sample:
+            results = analyzer.analyze(text=str(value), language='en')
+            if results:
+                pii_columns.append({
+                    'column': col,
+                    'pii_types': list(set(r.entity_type for r in results))
+                })
+                break
+
+    # Apply Unity Catalog tags
+    for pii_col in pii_columns:
+        w.tables.update(
+            full_name=f"{catalog}.{schema}.{table}",
+            columns=[{
+                'name': pii_col['column'],
+                'tags': {'pii': 'true', 'pii_types': ','.join(pii_col['pii_types'])}
+            }]
+        )
+
+    return pii_columns</pre></code>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="container">
+                <h2><span class="section-number">04</span> Technology Stack</h2>
+                <div class="tech-grid">
+                    <div class="tech-item"><h4>UNITY CATALOG</h4><p>Centralized governance for data and AI with fine-grained access control</p></div>
+                    <div class="tech-item"><h4>AZURE PURVIEW</h4><p>Cross-platform data catalog with automated scanning and classification</p></div>
+                    <div class="tech-item"><h4>GREAT EXPECTATIONS</h4><p>Data quality validation framework with automated testing</p></div>
+                    <div class="tech-item"><h4>PRESIDIO</h4><p>Microsoft's PII detection and anonymization framework</p></div>
+                    <div class="tech-item"><h4>OPEN POLICY AGENT</h4><p>Policy-as-code engine for automated governance enforcement</p></div>
+                    <div class="tech-item"><h4>APACHE ATLAS</h4><p>Data lineage and metadata management integration</p></div>
+                    <div class="tech-item"><h4>POWER BI</h4><p>Governance dashboards and compliance reporting</p></div>
+                    <div class="tech-item"><h4>TERRAFORM</h4><p>Infrastructure and access control provisioning as code</p></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="container">
+                <h2><span class="section-number">05</span> Results & Impact</h2>
+                <div class="metrics-grid">
+                    <div class="metric-card"><div class="metric-value">500+</div><div class="metric-label">Data Assets Cataloged</div></div>
+                    <div class="metric-card"><div class="metric-value">100%</div><div class="metric-label">Lineage Coverage</div></div>
+                    <div class="metric-card"><div class="metric-value">95%</div><div class="metric-label">PII Auto-classified</div></div>
+                    <div class="metric-card"><div class="metric-value">1 day</div><div class="metric-label">DSR Response (from 14)</div></div>
+                    <div class="metric-card"><div class="metric-value">Zero</div><div class="metric-label">Audit Findings</div></div>
+                    <div class="metric-card"><div class="metric-value">60%</div><div class="metric-label">Manual Effort Reduced</div></div>
+                </div>
+                <h3>Business Outcomes</h3>
+                <ul>
+                    <li>Passed regulatory audits with zero findings on data governance</li>
+                    <li>GDPR data subject requests reduced from 14 days to 24 hours</li>
+                    <li>Complete data lineage for all regulatory risk calculations</li>
+                    <li>Automated PII classification eliminated manual tagging burden</li>
+                    <li>Self-service data discovery reduced time-to-insight by 70%</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="container">
+                <h2><span class="section-number">06</span> Key Learnings</h2>
+                <ul>
+                    <li>Business glossary is more important than technical metadata for adoption</li>
+                    <li>Automated classification must be supplemented with steward review</li>
+                    <li>Policy-as-code enables consistent enforcement at scale</li>
+                    <li>Lineage capture must be built into pipeline development, not bolted on</li>
+                    <li>Executive sponsorship is critical for data governance success</li>
+                </ul>
+            </div>
+        </section>
+    </main>
+    <footer><div class="container"><p>&copy; 2024 Abhinav Verma - Lead Data Engineer</p></div></footer>
+</body>
+</html>

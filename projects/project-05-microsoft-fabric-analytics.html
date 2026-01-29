@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Microsoft Fabric Analytics Platform - Abhinav Verma</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg-primary: #0a0e17; --bg-secondary: #131824; --bg-card: #1a1f2e; --accent-primary: #00d9ff; --accent-secondary: #00ff88; --text-primary: #e8eaed; --text-secondary: #9ca3af; --text-tertiary: #6b7280; --border: #2d3748; --gradient-1: linear-gradient(135deg, #00d9ff 0%, #0066ff 100%); --gradient-2: linear-gradient(135deg, #00ff88 0%, #00d9ff 100%); }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Outfit', sans-serif; background: var(--bg-primary); color: var(--text-primary); line-height: 1.6; overflow-x: hidden; }
+        body::before { content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: linear-gradient(rgba(0, 217, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 217, 255, 0.03) 1px, transparent 1px); background-size: 50px 50px; z-index: 0; pointer-events: none; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; position: relative; z-index: 1; }
+        header { padding: 1.5rem 0; border-bottom: 1px solid var(--border); background: rgba(10, 14, 23, 0.95); backdrop-filter: blur(10px); position: sticky; top: 0; z-index: 100; }
+        .header-content { display: flex; justify-content: space-between; align-items: center; }
+        .back-link { display: flex; align-items: center; gap: 0.5rem; color: var(--accent-primary); text-decoration: none; font-weight: 500; transition: all 0.3s ease; }
+        .back-link:hover { gap: 0.75rem; }
+        .logo { font-family: 'JetBrains Mono', monospace; font-size: 1.25rem; font-weight: 700; background: var(--gradient-1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .project-hero { padding: 4rem 0; border-bottom: 1px solid var(--border); }
+        .project-meta { display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+        .project-tag { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; padding: 0.35rem 0.75rem; border-radius: 20px; background: rgba(0, 217, 255, 0.1); color: var(--accent-primary); border: 1px solid rgba(0, 217, 255, 0.3); }
+        .project-tag.industry { background: rgba(0, 255, 136, 0.1); color: var(--accent-secondary); border-color: rgba(0, 255, 136, 0.3); }
+        h1 { font-size: 3rem; font-weight: 700; margin-bottom: 1.5rem; line-height: 1.2; }
+        h1 .highlight { background: var(--gradient-2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .project-intro { font-size: 1.25rem; color: var(--text-secondary); max-width: 800px; line-height: 1.8; }
+        .content-section { padding: 4rem 0; border-bottom: 1px solid var(--border); }
+        .content-section:last-child { border-bottom: none; }
+        h2 { font-size: 1.75rem; margin-bottom: 1.5rem; color: var(--text-primary); }
+        h2 .section-number { color: var(--accent-primary); font-family: 'JetBrains Mono', monospace; margin-right: 0.5rem; }
+        h3 { font-size: 1.25rem; margin: 2rem 0 1rem; color: var(--accent-secondary); }
+        p { color: var(--text-secondary); margin-bottom: 1rem; line-height: 1.8; }
+        .architecture-diagram { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 2rem; margin: 2rem 0; overflow-x: auto; }
+        .architecture-diagram pre { font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--accent-primary); line-height: 1.4; margin: 0; }
+        .tech-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 2rem 0; }
+        .tech-item { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem; transition: all 0.3s ease; }
+        .tech-item:hover { border-color: var(--accent-primary); transform: translateY(-2px); }
+        .tech-item h4 { font-size: 0.875rem; color: var(--accent-secondary); margin-bottom: 0.5rem; font-family: 'JetBrains Mono', monospace; }
+        .tech-item p { font-size: 0.9rem; margin: 0; }
+        ul { list-style: none; margin: 1rem 0; }
+        ul li { color: var(--text-secondary); padding-left: 1.5rem; margin-bottom: 0.75rem; position: relative; }
+        ul li::before { content: '>'; position: absolute; left: 0; color: var(--accent-primary); font-family: 'JetBrains Mono', monospace; font-weight: bold; }
+        .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1.5rem; margin: 2rem 0; }
+        .metric-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; text-align: center; }
+        .metric-value { font-size: 2.5rem; font-weight: 700; background: var(--gradient-2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-family: 'JetBrains Mono', monospace; }
+        .metric-label { font-size: 0.875rem; color: var(--text-tertiary); margin-top: 0.5rem; }
+        .code-block { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; margin: 1.5rem 0; overflow-x: auto; }
+        .code-block code { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: var(--text-primary); }
+        .code-label { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--accent-secondary); margin-bottom: 0.75rem; display: block; }
+        footer { background: var(--bg-secondary); border-top: 1px solid var(--border); padding: 2rem 0; text-align: center; margin-top: 4rem; }
+        footer p { color: var(--text-tertiary); font-size: 0.9rem; margin: 0; }
+        @media (max-width: 768px) { h1 { font-size: 2rem; } .architecture-diagram pre { font-size: 0.65rem; } .metric-value { font-size: 2rem; } }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="../index.html" class="back-link"><span>&larr;</span> Back to Portfolio</a>
+                <div class="logo">&lt;ABHINAV/&gt;</div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="project-hero">
+            <div class="container">
+                <div class="project-meta">
+                    <span class="project-tag">Microsoft Fabric</span>
+                    <span class="project-tag">Synapse</span>
+                    <span class="project-tag">Power BI</span>
+                    <span class="project-tag industry">Financial Services</span>
+                </div>
+                <h1>Microsoft Fabric <span class="highlight">Unified Analytics</span></h1>
+                <p class="project-intro">
+                    Led the migration from Azure Synapse Analytics to Microsoft Fabric for a major financial
+                    services firm, creating a unified analytics platform that consolidates data engineering,
+                    data science, and business intelligence workloads under a single SaaS experience with
+                    OneLake as the foundation.
+                </p>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="container">
+                <h2><span class="section-number">01</span> Business Challenge</h2>
+                <p>
+                    The financial institution operated a complex analytics ecosystem that had grown organically
+                    over years, creating significant operational overhead and fragmented user experiences:
+                </p>
+                <ul>
+                    <li>Multiple disconnected analytics tools (Synapse, ADF, ADLS, Power BI) with separate management</li>
+                    <li>Data duplication across services leading to consistency issues and storage costs</li>
+                    <li>Complex networking and security configurations across multiple Azure services</li>
+                    <li>Siloed teams with different tools unable to collaborate effectively</li>
+                    <li>High operational overhead managing multiple service SKUs and capacity</li>
+                    <li>Regulatory compliance requiring unified audit trails across all data operations</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="container">
+                <h2><span class="section-number">02</span> Solution Architecture</h2>
+                <p>
+                    Designed a unified Microsoft Fabric implementation leveraging OneLake for centralized storage,
+                    Fabric workspaces for environment management, and the full spectrum of Fabric experiences
+                    for different persona needs.
+                </p>
+
+                <div class="architecture-diagram">
+                    <pre>
++--------------------------------------------------------------------------------------------------+
+|                              MICROSOFT FABRIC UNIFIED PLATFORM                                    |
++--------------------------------------------------------------------------------------------------+
+|                                                                                                    |
+|                                         ONELAKE                                                   |
+|  +--------------------------------------------------------------------------------------------+  |
+|  |                            Unified Data Lake (Delta Parquet)                               |  |
+|  |  +------------------+  +------------------+  +------------------+  +------------------+    |  |
+|  |  | Lakehouse        |  | Lakehouse        |  | Lakehouse        |  | Lakehouse        |    |  |
+|  |  | (Bronze)         |  | (Silver)         |  | (Gold)           |  | (Sandbox)        |    |  |
+|  |  | - Raw Ingestion  |  | - Cleansed       |  | - Aggregated     |  | - Data Science   |    |  |
+|  |  | - All Sources    |  | - Validated      |  | - Business Ready |  | - Experimentation|    |  |
+|  |  +------------------+  +------------------+  +------------------+  +------------------+    |  |
+|  +--------------------------------------------------------------------------------------------+  |
+|                                              |                                                    |
+|                                              v                                                    |
+|  DATA ENGINEERING                     DATA SCIENCE                    BUSINESS INTELLIGENCE      |
+|  +------------------+                +------------------+             +------------------+        |
+|  | Data Factory     |                | Synapse Data     |             | Power BI         |        |
+|  | - Pipelines      |                | Science          |             | - Semantic Models|        |
+|  | - Dataflows Gen2 |                | - Notebooks      |             | - Reports        |        |
+|  | - Copy Activity  |                | - ML Models      |             | - Dashboards     |        |
+|  +------------------+                | - Experiments    |             | - Direct Lake    |        |
+|                                      +------------------+             +------------------+        |
+|  +------------------+                                                                             |
+|  | Data Warehouse   |                REAL-TIME ANALYTICS              GOVERNANCE                 |
+|  | - T-SQL          |                +------------------+             +------------------+        |
+|  | - Cross-DB Query |                | Eventstreams     |             | Purview Hub      |        |
+|  | - Dimensional    |                | - Kafka Connect  |             | - Lineage        |        |
+|  +------------------+                | - Custom Sources |             | - Classification |        |
+|                                      +------------------+             | - Sensitivity    |        |
+|  +------------------+                | KQL Database     |             +------------------+        |
+|  | Spark (Lakehouse)|                | - Time Series    |             | Capacity Admin   |        |
+|  | - PySpark        |                | - IoT Analytics  |             | - Compute Mgmt   |        |
+|  | - Scala          |                | - Log Analytics  |             | - Workload Mgmt  |        |
+|  +------------------+                +------------------+             +------------------+        |
+|                                                                                                    |
+|  INTEGRATION & SECURITY                                                                           |
+|  +------------------+  +------------------+  +------------------+  +------------------+           |
+|  | Shortcuts        |  | Mirroring        |  | Entra ID         |  | Private Links    |           |
+|  | - ADLS Gen2      |  | - Azure SQL      |  | - SSO            |  | - VNet           |           |
+|  | - S3             |  | - Cosmos DB      |  | - Conditional    |  | - On-premises    |           |
+|  | - Dataverse      |  | - Snowflake      |  |   Access         |  |   Gateway        |           |
+|  +------------------+  +------------------+  +------------------+  +------------------+           |
+|                                                                                                    |
++--------------------------------------------------------------------------------------------------+
+                    </pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="container">
+                <h2><span class="section-number">03</span> Technical Implementation</h2>
+
+                <h3>Lakehouse Delta Tables</h3>
+                <div class="code-block">
+                    <span class="code-label">// PySpark Notebook - Medallion Architecture Processing</span>
+                    <code><pre>
+# Bronze to Silver transformation with data quality
+from pyspark.sql.functions import *
+from delta.tables import DeltaTable
+
+# Read from Bronze lakehouse
+bronze_df = spark.read.format("delta").load(
+    "abfss://bronze@onelake.dfs.fabric.microsoft.com/transactions"
+)
+
+# Data quality checks and cleansing
+silver_df = (bronze_df
+    .filter(col("transaction_id").isNotNull())
+    .filter(col("amount") > 0)
+    .withColumn("transaction_date", to_date("transaction_timestamp"))
+    .withColumn("amount_usd",
+        when(col("currency") == "USD", col("amount"))
+        .otherwise(col("amount") * col("exchange_rate"))
+    )
+    .dropDuplicates(["transaction_id"])
+    .withColumn("processing_time", current_timestamp())
+)
+
+# Merge into Silver lakehouse
+silver_table = DeltaTable.forPath(spark,
+    "abfss://silver@onelake.dfs.fabric.microsoft.com/transactions"
+)
+
+silver_table.alias("target").merge(
+    silver_df.alias("source"),
+    "target.transaction_id = source.transaction_id"
+).whenMatchedUpdateAll() \
+ .whenNotMatchedInsertAll() \
+ .execute()
+
+# Optimize for query performance
+spark.sql("""
+    OPTIMIZE silver.transactions
+    ZORDER BY (transaction_date, account_id)
+""")</pre></code>
+                </div>
+
+                <h3>Fabric Data Warehouse - T-SQL</h3>
+                <div class="code-block">
+                    <span class="code-label">// T-SQL - Dimensional Model in Warehouse</span>
+                    <code><pre>
+-- Create fact table with cross-database reference to Lakehouse
+CREATE TABLE gold.fct_daily_transactions
+AS
+SELECT
+    t.transaction_date,
+    t.account_id,
+    a.customer_id,
+    a.account_type,
+    c.customer_segment,
+    c.region,
+    COUNT(*) as transaction_count,
+    SUM(t.amount_usd) as total_amount,
+    AVG(t.amount_usd) as avg_amount,
+    SUM(CASE WHEN t.transaction_type = 'CREDIT' THEN t.amount_usd ELSE 0 END) as credit_amount,
+    SUM(CASE WHEN t.transaction_type = 'DEBIT' THEN t.amount_usd ELSE 0 END) as debit_amount
+FROM silver_lakehouse.dbo.transactions t
+INNER JOIN gold.dim_accounts a ON t.account_id = a.account_id
+INNER JOIN gold.dim_customers c ON a.customer_id = c.customer_id
+WHERE t.transaction_date >= DATEADD(day, -1, GETDATE())
+GROUP BY
+    t.transaction_date,
+    t.account_id,
+    a.customer_id,
+    a.account_type,
+    c.customer_segment,
+    c.region;
+
+-- Create statistics for query optimization
+CREATE STATISTICS stat_transaction_date ON gold.fct_daily_transactions(transaction_date);
+CREATE STATISTICS stat_customer_segment ON gold.fct_daily_transactions(customer_segment);</pre></code>
+                </div>
+
+                <h3>Direct Lake Semantic Model</h3>
+                <div class="code-block">
+                    <span class="code-label">// DAX Measures for Power BI</span>
+                    <code><pre>
+// YTD Revenue with time intelligence
+YTD Revenue =
+CALCULATE(
+    SUM(fct_daily_transactions[total_amount]),
+    DATESYTD(dim_date[date])
+)
+
+// Month-over-Month Growth
+MoM Growth % =
+VAR CurrentMonth = [Total Revenue]
+VAR PreviousMonth =
+    CALCULATE(
+        [Total Revenue],
+        DATEADD(dim_date[date], -1, MONTH)
+    )
+RETURN
+    DIVIDE(CurrentMonth - PreviousMonth, PreviousMonth, 0)
+
+// Rolling 30-Day Average
+Rolling 30D Avg =
+AVERAGEX(
+    DATESINPERIOD(dim_date[date], MAX(dim_date[date]), -30, DAY),
+    [Daily Revenue]
+)</pre></code>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="container">
+                <h2><span class="section-number">04</span> Technology Stack</h2>
+                <div class="tech-grid">
+                    <div class="tech-item">
+                        <h4>ONELAKE</h4>
+                        <p>Unified data lake built on ADLS Gen2 with automatic Delta format optimization</p>
+                    </div>
+                    <div class="tech-item">
+                        <h4>FABRIC LAKEHOUSE</h4>
+                        <p>Combined data lake and warehouse with Spark and SQL analytics</p>
+                    </div>
+                    <div class="tech-item">
+                        <h4>FABRIC WAREHOUSE</h4>
+                        <p>T-SQL data warehouse with cross-database queries and automatic optimization</p>
+                    </div>
+                    <div class="tech-item">
+                        <h4>DATA FACTORY</h4>
+                        <p>Cloud-scale data integration with Dataflows Gen2 and pipeline orchestration</p>
+                    </div>
+                    <div class="tech-item">
+                        <h4>POWER BI</h4>
+                        <p>Business intelligence with Direct Lake for real-time analytics on lakehouse data</p>
+                    </div>
+                    <div class="tech-item">
+                        <h4>SYNAPSE DATA SCIENCE</h4>
+                        <p>ML workbench with MLflow integration and model deployment</p>
+                    </div>
+                    <div class="tech-item">
+                        <h4>EVENTSTREAMS</h4>
+                        <p>Real-time data ingestion with Kafka protocol support</p>
+                    </div>
+                    <div class="tech-item">
+                        <h4>PURVIEW HUB</h4>
+                        <p>Unified data governance with lineage, classification, and sensitivity labels</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="container">
+                <h2><span class="section-number">05</span> Results & Impact</h2>
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-value">45%</div>
+                        <div class="metric-label">Cost Reduction</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">70%</div>
+                        <div class="metric-label">Less Admin Overhead</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">10x</div>
+                        <div class="metric-label">Faster Power BI</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">500+</div>
+                        <div class="metric-label">Reports Migrated</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">100%</div>
+                        <div class="metric-label">Data Lineage</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">1</div>
+                        <div class="metric-label">Unified Platform</div>
+                    </div>
+                </div>
+
+                <h3>Business Outcomes</h3>
+                <ul>
+                    <li>Consolidated 5 separate Azure services into single Fabric platform</li>
+                    <li>Direct Lake eliminated data import, reducing Power BI refresh from hours to seconds</li>
+                    <li>Unified governance with Purview integration for complete data lineage</li>
+                    <li>Single capacity model simplified cost management and chargeback</li>
+                    <li>Accelerated time-to-insight enabling faster regulatory reporting</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="container">
+                <h2><span class="section-number">06</span> Key Learnings</h2>
+                <ul>
+                    <li>OneLake shortcuts enable gradual migration without data movement</li>
+                    <li>Direct Lake mode requires careful V-Order optimization for best performance</li>
+                    <li>Fabric capacity management requires understanding of CU consumption patterns</li>
+                    <li>Cross-database queries in Warehouse enable true lakehouse flexibility</li>
+                    <li>Git integration for Fabric items enables proper DevOps practices</li>
+                </ul>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Abhinav Verma - Lead Data Engineer</p>
+        </div>
+    </footer>
+</body>
+</html>

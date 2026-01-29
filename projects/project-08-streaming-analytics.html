@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time Streaming Analytics - Abhinav Verma</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg-primary: #0a0e17; --bg-secondary: #131824; --bg-card: #1a1f2e; --accent-primary: #00d9ff; --accent-secondary: #00ff88; --text-primary: #e8eaed; --text-secondary: #9ca3af; --text-tertiary: #6b7280; --border: #2d3748; --gradient-1: linear-gradient(135deg, #00d9ff 0%, #0066ff 100%); --gradient-2: linear-gradient(135deg, #00ff88 0%, #00d9ff 100%); }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Outfit', sans-serif; background: var(--bg-primary); color: var(--text-primary); line-height: 1.6; overflow-x: hidden; }
+        body::before { content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: linear-gradient(rgba(0, 217, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 217, 255, 0.03) 1px, transparent 1px); background-size: 50px 50px; z-index: 0; pointer-events: none; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; position: relative; z-index: 1; }
+        header { padding: 1.5rem 0; border-bottom: 1px solid var(--border); background: rgba(10, 14, 23, 0.95); backdrop-filter: blur(10px); position: sticky; top: 0; z-index: 100; }
+        .header-content { display: flex; justify-content: space-between; align-items: center; }
+        .back-link { display: flex; align-items: center; gap: 0.5rem; color: var(--accent-primary); text-decoration: none; font-weight: 500; transition: all 0.3s ease; }
+        .back-link:hover { gap: 0.75rem; }
+        .logo { font-family: 'JetBrains Mono', monospace; font-size: 1.25rem; font-weight: 700; background: var(--gradient-1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .project-hero { padding: 4rem 0; border-bottom: 1px solid var(--border); }
+        .project-meta { display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+        .project-tag { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; padding: 0.35rem 0.75rem; border-radius: 20px; background: rgba(0, 217, 255, 0.1); color: var(--accent-primary); border: 1px solid rgba(0, 217, 255, 0.3); }
+        .project-tag.industry { background: rgba(0, 255, 136, 0.1); color: var(--accent-secondary); border-color: rgba(0, 255, 136, 0.3); }
+        h1 { font-size: 3rem; font-weight: 700; margin-bottom: 1.5rem; line-height: 1.2; }
+        h1 .highlight { background: var(--gradient-2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .project-intro { font-size: 1.25rem; color: var(--text-secondary); max-width: 800px; line-height: 1.8; }
+        .content-section { padding: 4rem 0; border-bottom: 1px solid var(--border); }
+        .content-section:last-child { border-bottom: none; }
+        h2 { font-size: 1.75rem; margin-bottom: 1.5rem; color: var(--text-primary); }
+        h2 .section-number { color: var(--accent-primary); font-family: 'JetBrains Mono', monospace; margin-right: 0.5rem; }
+        h3 { font-size: 1.25rem; margin: 2rem 0 1rem; color: var(--accent-secondary); }
+        p { color: var(--text-secondary); margin-bottom: 1rem; line-height: 1.8; }
+        .architecture-diagram { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 2rem; margin: 2rem 0; overflow-x: auto; }
+        .architecture-diagram pre { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--accent-primary); line-height: 1.4; margin: 0; }
+        .tech-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 2rem 0; }
+        .tech-item { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem; transition: all 0.3s ease; }
+        .tech-item:hover { border-color: var(--accent-primary); transform: translateY(-2px); }
+        .tech-item h4 { font-size: 0.875rem; color: var(--accent-secondary); margin-bottom: 0.5rem; font-family: 'JetBrains Mono', monospace; }
+        .tech-item p { font-size: 0.9rem; margin: 0; }
+        ul { list-style: none; margin: 1rem 0; }
+        ul li { color: var(--text-secondary); padding-left: 1.5rem; margin-bottom: 0.75rem; position: relative; }
+        ul li::before { content: '>'; position: absolute; left: 0; color: var(--accent-primary); font-family: 'JetBrains Mono', monospace; font-weight: bold; }
+        .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1.5rem; margin: 2rem 0; }
+        .metric-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; text-align: center; }
+        .metric-value { font-size: 2.5rem; font-weight: 700; background: var(--gradient-2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-family: 'JetBrains Mono', monospace; }
+        .metric-label { font-size: 0.875rem; color: var(--text-tertiary); margin-top: 0.5rem; }
+        .code-block { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; margin: 1.5rem 0; overflow-x: auto; }
+        .code-block code { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: var(--text-primary); }
+        .code-label { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--accent-secondary); margin-bottom: 0.75rem; display: block; }
+        footer { background: var(--bg-secondary); border-top: 1px solid var(--border); padding: 2rem 0; text-align: center; margin-top: 4rem; }
+        footer p { color: var(--text-tertiary); font-size: 0.9rem; margin: 0; }
+        @media (max-width: 768px) { h1 { font-size: 2rem; } .architecture-diagram pre { font-size: 0.6rem; } .metric-value { font-size: 2rem; } }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="../index.html" class="back-link"><span>&larr;</span> Back to Portfolio</a>
+                <div class="logo">&lt;ABHINAV/&gt;</div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="project-hero">
+            <div class="container">
+                <div class="project-meta">
+                    <span class="project-tag">Kafka</span>
+                    <span class="project-tag">Spark Streaming</span>
+                    <span class="project-tag">Delta Lake</span>
+                    <span class="project-tag industry">E-commerce Platform</span>
+                </div>
+                <h1>Real-Time <span class="highlight">Streaming Analytics</span></h1>
+                <p class="project-intro">
+                    Built a real-time streaming analytics platform for a major e-commerce company processing
+                    1 million events per second. The platform enables real-time personalization, fraud detection,
+                    inventory updates, and customer journey analytics with sub-second latency.
+                </p>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="container">
+                <h2><span class="section-number">01</span> Business Challenge</h2>
+                <p>
+                    The e-commerce platform needed real-time capabilities to compete with market leaders
+                    and improve customer experience:
+                </p>
+                <ul>
+                    <li>Batch processing with 4-hour delays preventing real-time personalization</li>
+                    <li>Fraud detection happening post-transaction, resulting in $10M+ annual losses</li>
+                    <li>Inventory counts updated hourly, causing overselling and customer disappointment</li>
+                    <li>No real-time visibility into customer journey for marketing optimization</li>
+                    <li>Peak traffic during sales events overwhelming batch infrastructure</li>
+                    <li>Inability to react to trends and anomalies in real-time</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="container">
+                <h2><span class="section-number">02</span> Solution Architecture</h2>
+                <p>
+                    Implemented a kappa architecture using Apache Kafka as the central event backbone,
+                    Spark Structured Streaming for processing, and Delta Lake for the unified batch
+                    and streaming data store.
+                </p>
+
+                <div class="architecture-diagram">
+                    <pre>
++--------------------------------------------------------------------------------------------------------------+
+|                                    REAL-TIME STREAMING PLATFORM                                               |
++--------------------------------------------------------------------------------------------------------------+
+|                                                                                                               |
+|  EVENT SOURCES                     INGESTION                              STREAM PROCESSING                  |
+|  +-------------------+             +------------------------+             +------------------------+         |
+|  | Web Clickstream   |             |    APACHE KAFKA        |             |  SPARK STRUCTURED      |         |
+|  | - Page views      |             |    (Event Backbone)    |             |  STREAMING             |         |
+|  | - Add to cart     |------------>|                        |------------>|                        |         |
+|  | - Purchases       |             | +------------------+   |             | +------------------+   |         |
+|  +-------------------+             | | clickstream      |   |             | | Real-time Aggs   |   |         |
+|                                    | | (1000 partitions)|   |             | | - Sessionization |   |         |
+|  +-------------------+             | +------------------+   |             | | - Windowing      |   |         |
+|  | Mobile App        |             | +------------------+   |             | +------------------+   |         |
+|  | - App events      |------------>| | orders           |   |             |          |             |         |
+|  | - Push responses  |             | | (500 partitions) |   |             |          v             |         |
+|  +-------------------+             | +------------------+   |             | +------------------+   |         |
+|                                    | +------------------+   |             | | ML Scoring       |   |         |
+|  +-------------------+             | | inventory        |   |             | | - Fraud Model    |   |         |
+|  | IoT/Warehouse     |------------>| | (200 partitions) |   |             | | - Personalization|   |         |
+|  | - RFID scans      |             | +------------------+   |             | +------------------+   |         |
+|  | - Inventory moves |             | +------------------+   |             |                        |         |
+|  +-------------------+             | | user-activity    |   |             +------------------------+         |
+|                                    | | (300 partitions) |   |                        |                       |
+|  +-------------------+             | +------------------+   |                        |                       |
+|  | Payment Gateway   |             +------------------------+                        |                       |
+|  | - Transactions    |                       |                                       |                       |
+|  | - Refunds         |                       |                                       v                       |
+|  +-------------------+                       |                          +------------------------+           |
+|                                              |                          |     DELTA LAKE         |           |
+|                                              |                          |  (Unified Storage)     |           |
+|  REAL-TIME SERVING                           |                          | +------------------+   |           |
+|  +-------------------+                       |                          | | Bronze (raw)     |   |           |
+|  | Redis Cluster     |<----------------------+                          | +------------------+   |           |
+|  | - Session State   |                                                  | +------------------+   |           |
+|  | - Feature Cache   |                                                  | | Silver (cleaned) |   |           |
+|  +-------------------+                                                  | +------------------+   |           |
+|                                                                         | +------------------+   |           |
+|  +-------------------+                                                  | | Gold (aggregated)|   |           |
+|  | Elasticsearch     |                                                  | +------------------+   |           |
+|  | - Search Index    |                                                  +------------------------+           |
+|  | - Recommendations |                                                                                        |
+|  +-------------------+                                                                                        |
+|                                                                                                               |
+|  REAL-TIME ACTIONS                                                                                           |
+|  +-------------------+  +-------------------+  +-------------------+  +-------------------+                  |
+|  | Personalization   |  | Fraud Prevention  |  | Inventory Sync    |  | Real-time Alerts  |                  |
+|  | API               |  | - Block txn       |  | - Reserve stock   |  | - PagerDuty       |                  |
+|  | - Recommendations |  | - Step-up auth    |  | - Update counts   |  | - Slack           |                  |
+|  +-------------------+  +-------------------+  +-------------------+  +-------------------+                  |
+|                                                                                                               |
++--------------------------------------------------------------------------------------------------------------+
+                    </pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="container">
+                <h2><span class="section-number">03</span> Technical Implementation</h2>
+
+                <h3>Spark Structured Streaming</h3>
+                <div class="code-block">
+                    <span class="code-label">// PySpark - Real-time Session Analytics</span>
+                    <code><pre>
+from pyspark.sql.functions import *
+from pyspark.sql.types import *
+
+# Read from Kafka
+clickstream = (spark.readStream
+    .format("kafka")
+    .option("kafka.bootstrap.servers", kafka_brokers)
+    .option("subscribe", "clickstream")
+    .option("startingOffsets", "latest")
+    .option("maxOffsetsPerTrigger", 100000)
+    .load()
+    .select(
+        from_json(col("value").cast("string"), event_schema).alias("event"),
+        col("timestamp").alias("kafka_timestamp")
+    )
+    .select("event.*", "kafka_timestamp"))
+
+# Session window aggregation
+sessions = (clickstream
+    .withWatermark("event_time", "30 minutes")
+    .groupBy(
+        session_window("event_time", "30 minutes"),
+        "user_id",
+        "device_type"
+    )
+    .agg(
+        count("*").alias("event_count"),
+        countDistinct("page_url").alias("unique_pages"),
+        sum(when(col("event_type") == "purchase", col("amount")).otherwise(0)).alias("revenue"),
+        collect_list("event_type").alias("event_sequence"),
+        first("event_time").alias("session_start"),
+        last("event_time").alias("session_end")
+    )
+    .withColumn("session_duration_sec",
+        unix_timestamp("session_end") - unix_timestamp("session_start")
+    ))
+
+# Write to Delta Lake
+(sessions.writeStream
+    .format("delta")
+    .outputMode("append")
+    .option("checkpointLocation", "/checkpoints/sessions")
+    .trigger(processingTime="10 seconds")
+    .toTable("gold.user_sessions"))</pre></code>
+                </div>
+
+                <h3>Fraud Detection Pipeline</h3>
+                <div class="code-block">
+                    <span class="code-label">// Real-time Fraud Scoring with ML</span>
+                    <code><pre>
+from pyspark.ml import PipelineModel
+import mlflow
+
+# Load production fraud model
+fraud_model = mlflow.spark.load_model("models:/fraud_detection/Production")
+
+# Feature engineering on stream
+transactions = (spark.readStream
+    .format("kafka")
+    .option("subscribe", "orders")
+    .load()
+    .select(from_json(col("value").cast("string"), order_schema).alias("order"))
+    .select("order.*"))
+
+# Enrich with historical features from feature store
+user_features = spark.table("feature_store.user_features")
+enriched = transactions.join(
+    broadcast(user_features),
+    "user_id",
+    "left"
+)
+
+# Score in real-time
+scored = fraud_model.transform(enriched)
+
+# Route high-risk transactions
+(scored
+    .filter(col("fraud_probability") > 0.8)
+    .writeStream
+    .format("kafka")
+    .option("topic", "high-risk-transactions")
+    .option("checkpointLocation", "/checkpoints/fraud")
+    .trigger(processingTime="1 second")
+    .start())
+
+# Store all scores for analysis
+(scored
+    .writeStream
+    .format("delta")
+    .option("checkpointLocation", "/checkpoints/fraud-scores")
+    .toTable("gold.transaction_fraud_scores"))</pre></code>
+                </div>
+
+                <h3>Kafka Configuration</h3>
+                <div class="code-block">
+                    <span class="code-label">// Terraform - Kafka Cluster Configuration</span>
+                    <code><pre>
+resource "confluent_kafka_cluster" "streaming" {
+  display_name = "ecommerce-streaming"
+  availability = "MULTI_ZONE"
+  cloud        = "AWS"
+  region       = "us-east-1"
+
+  dedicated {
+    cku = 4
+  }
+
+  environment {
+    id = confluent_environment.production.id
+  }
+}
+
+resource "confluent_kafka_topic" "clickstream" {
+  kafka_cluster {
+    id = confluent_kafka_cluster.streaming.id
+  }
+
+  topic_name       = "clickstream"
+  partitions_count = 1000
+  config = {
+    "retention.ms"          = "604800000"  # 7 days
+    "cleanup.policy"        = "delete"
+    "compression.type"      = "lz4"
+    "min.insync.replicas"   = "2"
+  }
+}
+
+resource "confluent_schema_registry_cluster" "main" {
+  environment {
+    id = confluent_environment.production.id
+  }
+
+  package = "ADVANCED"
+  region {
+    id = "us-east-1"
+  }
+}</pre></code>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="container">
+                <h2><span class="section-number">04</span> Technology Stack</h2>
+                <div class="tech-grid">
+                    <div class="tech-item">
+                        <h4>APACHE KAFKA</h4>
+                        <p>Distributed event streaming platform handling 1M+ events/second</p>
+                    </div>
+                    <div class="tech-item">
+                        <h4>SPARK STREAMING</h4>
+                        <p>Unified batch and streaming processing with exactly-once semantics</p>
+                    </div>
+                    <div class="tech-item">
+                        <h4>DELTA LAKE</h4>
+                        <p>Lakehouse storage with streaming support and ACID transactions</p>
+                    </div>
+                    <div class="tech-item">
+                        <h4>REDIS CLUSTER</h4>
+                        <p>In-memory data store for real-time feature serving</p>
+                    </div>
+                    <div class="tech-item">
+                        <h4>SCHEMA REGISTRY</h4>
+                        <p>Schema management for event compatibility and evolution</p>
+                    </div>
+                    <div class="tech-item">
+                        <h4>MLFLOW</h4>
+                        <p>ML model management for real-time scoring deployment</p>
+                    </div>
+                    <div class="tech-item">
+                        <h4>ELASTICSEARCH</h4>
+                        <p>Real-time search and analytics for customer-facing features</p>
+                    </div>
+                    <div class="tech-item">
+                        <h4>GRAFANA</h4>
+                        <p>Real-time dashboards and alerting for streaming operations</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="container">
+                <h2><span class="section-number">05</span> Results & Impact</h2>
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-value">1M+</div>
+                        <div class="metric-label">Events/Second</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">&lt;100ms</div>
+                        <div class="metric-label">P99 Latency</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">92%</div>
+                        <div class="metric-label">Fraud Blocked</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">35%</div>
+                        <div class="metric-label">Conversion Lift</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">$8M</div>
+                        <div class="metric-label">Fraud Prevented</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">99.99%</div>
+                        <div class="metric-label">Uptime</div>
+                    </div>
+                </div>
+
+                <h3>Business Outcomes</h3>
+                <ul>
+                    <li>Real-time personalization increased conversion rates by 35%</li>
+                    <li>Fraud detection prevented $8M in losses annually</li>
+                    <li>Real-time inventory eliminated overselling incidents</li>
+                    <li>Customer journey analytics enabled 50% faster marketing optimization</li>
+                    <li>Platform handled 10x traffic during Black Friday without issues</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="container">
+                <h2><span class="section-number">06</span> Key Learnings</h2>
+                <ul>
+                    <li>Kafka partition count significantly impacts parallelism - plan for growth</li>
+                    <li>Watermarks and late data handling require careful business requirement analysis</li>
+                    <li>Delta Lake's streaming support enables true lakehouse with minimal complexity</li>
+                    <li>Feature store is essential for consistent ML scoring in real-time</li>
+                    <li>Schema evolution in streaming requires strict compatibility policies</li>
+                </ul>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Abhinav Verma - Lead Data Engineer</p>
+        </div>
+    </footer>
+</body>
+</html>

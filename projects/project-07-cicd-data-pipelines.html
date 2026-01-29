@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CI/CD for Data Pipelines - Abhinav Verma</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg-primary: #0a0e17; --bg-secondary: #131824; --bg-card: #1a1f2e; --accent-primary: #00d9ff; --accent-secondary: #00ff88; --text-primary: #e8eaed; --text-secondary: #9ca3af; --text-tertiary: #6b7280; --border: #2d3748; --gradient-1: linear-gradient(135deg, #00d9ff 0%, #0066ff 100%); --gradient-2: linear-gradient(135deg, #00ff88 0%, #00d9ff 100%); }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Outfit', sans-serif; background: var(--bg-primary); color: var(--text-primary); line-height: 1.6; overflow-x: hidden; }
+        body::before { content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: linear-gradient(rgba(0, 217, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 217, 255, 0.03) 1px, transparent 1px); background-size: 50px 50px; z-index: 0; pointer-events: none; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; position: relative; z-index: 1; }
+        header { padding: 1.5rem 0; border-bottom: 1px solid var(--border); background: rgba(10, 14, 23, 0.95); backdrop-filter: blur(10px); position: sticky; top: 0; z-index: 100; }
+        .header-content { display: flex; justify-content: space-between; align-items: center; }
+        .back-link { display: flex; align-items: center; gap: 0.5rem; color: var(--accent-primary); text-decoration: none; font-weight: 500; transition: all 0.3s ease; }
+        .back-link:hover { gap: 0.75rem; }
+        .logo { font-family: 'JetBrains Mono', monospace; font-size: 1.25rem; font-weight: 700; background: var(--gradient-1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .project-hero { padding: 4rem 0; border-bottom: 1px solid var(--border); }
+        .project-meta { display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+        .project-tag { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; padding: 0.35rem 0.75rem; border-radius: 20px; background: rgba(0, 217, 255, 0.1); color: var(--accent-primary); border: 1px solid rgba(0, 217, 255, 0.3); }
+        .project-tag.industry { background: rgba(0, 255, 136, 0.1); color: var(--accent-secondary); border-color: rgba(0, 255, 136, 0.3); }
+        h1 { font-size: 3rem; font-weight: 700; margin-bottom: 1.5rem; line-height: 1.2; }
+        h1 .highlight { background: var(--gradient-2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .project-intro { font-size: 1.25rem; color: var(--text-secondary); max-width: 800px; line-height: 1.8; }
+        .content-section { padding: 4rem 0; border-bottom: 1px solid var(--border); }
+        .content-section:last-child { border-bottom: none; }
+        h2 { font-size: 1.75rem; margin-bottom: 1.5rem; color: var(--text-primary); }
+        h2 .section-number { color: var(--accent-primary); font-family: 'JetBrains Mono', monospace; margin-right: 0.5rem; }
+        h3 { font-size: 1.25rem; margin: 2rem 0 1rem; color: var(--accent-secondary); }
+        p { color: var(--text-secondary); margin-bottom: 1rem; line-height: 1.8; }
+        .architecture-diagram { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 2rem; margin: 2rem 0; overflow-x: auto; }
+        .architecture-diagram pre { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--accent-primary); line-height: 1.4; margin: 0; }
+        .tech-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 2rem 0; }
+        .tech-item { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem; transition: all 0.3s ease; }
+        .tech-item:hover { border-color: var(--accent-primary); transform: translateY(-2px); }
+        .tech-item h4 { font-size: 0.875rem; color: var(--accent-secondary); margin-bottom: 0.5rem; font-family: 'JetBrains Mono', monospace; }
+        .tech-item p { font-size: 0.9rem; margin: 0; }
+        ul { list-style: none; margin: 1rem 0; }
+        ul li { color: var(--text-secondary); padding-left: 1.5rem; margin-bottom: 0.75rem; position: relative; }
+        ul li::before { content: '>'; position: absolute; left: 0; color: var(--accent-primary); font-family: 'JetBrains Mono', monospace; font-weight: bold; }
+        .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1.5rem; margin: 2rem 0; }
+        .metric-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; text-align: center; }
+        .metric-value { font-size: 2.5rem; font-weight: 700; background: var(--gradient-2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-family: 'JetBrains Mono', monospace; }
+        .metric-label { font-size: 0.875rem; color: var(--text-tertiary); margin-top: 0.5rem; }
+        .code-block { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; margin: 1.5rem 0; overflow-x: auto; }
+        .code-block code { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: var(--text-primary); }
+        .code-label { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--accent-secondary); margin-bottom: 0.75rem; display: block; }
+        footer { background: var(--bg-secondary); border-top: 1px solid var(--border); padding: 2rem 0; text-align: center; margin-top: 4rem; }
+        footer p { color: var(--text-tertiary); font-size: 0.9rem; margin: 0; }
+        @media (max-width: 768px) { h1 { font-size: 2rem; } .architecture-diagram pre { font-size: 0.6rem; } .metric-value { font-size: 2rem; } }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="../index.html" class="back-link"><span>&larr;</span> Back to Portfolio</a>
+                <div class="logo">&lt;ABHINAV/&gt;</div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="project-hero">
+            <div class="container">
+                <div class="project-meta">
+                    <span class="project-tag">CI/CD</span>
+                    <span class="project-tag">Terraform</span>
+                    <span class="project-tag">Docker</span>
+                    <span class="project-tag">GitOps</span>
+                    <span class="project-tag industry">Energy Sector</span>
+                </div>
+                <h1><span class="highlight">CI/CD Pipeline</span> for Data Engineering</h1>
+                <p class="project-intro">
+                    Established enterprise-grade CI/CD practices for data engineering at a major energy company,
+                    implementing Infrastructure as Code, containerized workloads, automated testing, and GitOps
+                    workflows for 50+ data pipelines across development, staging, and production environments.
+                </p>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="container">
+                <h2><span class="section-number">01</span> Business Challenge</h2>
+                <p>
+                    The data engineering team operated with manual deployment processes that led to
+                    frequent production issues and slow delivery cycles:
+                </p>
+                <ul>
+                    <li>Manual deployments causing inconsistencies between environments</li>
+                    <li>No automated testing leading to production data quality issues</li>
+                    <li>Infrastructure changes made through console clicks, not tracked in version control</li>
+                    <li>2-week deployment cycles due to manual approval and deployment processes</li>
+                    <li>No rollback capability when issues occurred in production</li>
+                    <li>Tribal knowledge required for deployments, creating key-person dependencies</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="container">
+                <h2><span class="section-number">02</span> Solution Architecture</h2>
+                <p>
+                    Implemented a comprehensive DataOps platform with GitOps principles, automated testing
+                    at multiple levels, and Infrastructure as Code for all data platform resources.
+                </p>
+
+                <div class="architecture-diagram">
+                    <pre>
++--------------------------------------------------------------------------------------------------------------+
+|                                    CI/CD FOR DATA ENGINEERING                                                 |
++--------------------------------------------------------------------------------------------------------------+
+|                                                                                                               |
+|  SOURCE CONTROL                    BUILD & TEST                         ARTIFACT MANAGEMENT                  |
+|  +-------------------+             +---------------------------+        +-------------------+                |
+|  | GitHub Repos      |             | GitHub Actions Workflows  |        | Container Registry|                |
+|  | - dbt projects    |------------>| +---------------------+   |------->| - Docker Images   |                |
+|  | - Airflow DAGs    |             | | Linting & Validation|   |        | - Helm Charts     |                |
+|  | - Terraform IaC   |             | | - SQLFluff          |   |        +-------------------+                |
+|  | - Python packages |             | | - terraform validate|   |        | Artifact Store    |                |
+|  +-------------------+             | | - yamllint          |   |        | - Python Wheels   |                |
+|         |                          | +---------------------+   |        | - dbt packages    |                |
+|         |                          |           |               |        +-------------------+                |
+|         v                          |           v               |                                             |
+|  +-------------------+             | +---------------------+   |                                             |
+|  | Branch Strategy   |             | | Unit Tests          |   |                                             |
+|  | - main (prod)     |             | | - pytest            |   |                                             |
+|  | - develop         |             | | - dbt test          |   |                                             |
+|  | - feature/*       |             | | - Great Expectations|   |                                             |
+|  | - hotfix/*        |             | +---------------------+   |                                             |
+|  +-------------------+             |           |               |                                             |
+|                                    |           v               |                                             |
+|                                    | +---------------------+   |                                             |
+|                                    | | Integration Tests   |   |                                             |
+|                                    | | - dbt run (sample)  |   |                                             |
+|                                    | | - Pipeline tests    |   |                                             |
+|                                    | +---------------------+   |                                             |
+|                                    +---------------------------+                                             |
+|                                                                                                               |
+|  INFRASTRUCTURE AS CODE                         DEPLOYMENT                                                   |
+|  +-------------------+             +---------------------------+        +-------------------+                |
+|  | Terraform         |             | ArgoCD (GitOps)           |        | ENVIRONMENTS      |                |
+|  | - Databricks WS   |------------>| +---------------------+   |------->|                   |                |
+|  | - Azure Resources |             | | Sync Policies       |   |        | +-------------+   |                |
+|  | - IAM/RBAC        |             | | - Auto-sync dev     |   |        | | Development |   |                |
+|  | - Networking      |             | | - Manual prod       |   |        | +-------------+   |                |
+|  +-------------------+             | +---------------------+   |        |       |           |                |
+|                                    |           |               |        |       v           |                |
+|  +-------------------+             |           v               |        | +-------------+   |                |
+|  | Helm Charts       |             | +---------------------+   |        | | Staging     |   |                |
+|  | - Airflow         |             | | Progressive Rollout |   |        | +-------------+   |                |
+|  | - Spark Apps      |             | | - Canary            |   |        |       |           |                |
+|  | - Custom Services |             | | - Blue/Green        |   |        |       v           |                |
+|  +-------------------+             | +---------------------+   |        | +-------------+   |                |
+|                                    +---------------------------+        | | Production  |   |                |
+|                                                                         | +-------------+   |                |
+|  MONITORING & OBSERVABILITY                                             +-------------------+                |
+|  +-------------------+  +-------------------+  +-------------------+                                         |
+|  | Prometheus        |  | Grafana           |  | PagerDuty         |                                         |
+|  | - Pipeline Metrics|  | - Dashboards      |  | - Alerting        |                                         |
+|  | - Data Quality    |  | - SLO Tracking    |  | - On-call         |                                         |
+|  +-------------------+  +-------------------+  +-------------------+                                         |
+|                                                                                                               |
++--------------------------------------------------------------------------------------------------------------+
+                    </pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="container">
+                <h2><span class="section-number">03</span> Technical Implementation</h2>
+
+                <h3>GitHub Actions Workflow</h3>
+                <div class="code-block">
+                    <span class="code-label">// .github/workflows/dbt-ci.yml</span>
+                    <code><pre>
+name: dbt CI/CD Pipeline
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+env:
+  DBT_PROFILES_DIR: ./profiles
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: SQL Linting
+        uses: sqlfluff/sqlfluff-github-actions/lint@v1
+        with:
+          paths: models/
+          config: .sqlfluff
+
+  test:
+    needs: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          pip install dbt-databricks great_expectations pytest
+
+      - name: dbt deps
+        run: dbt deps
+
+      - name: dbt compile
+        run: dbt compile --target ci
+        env:
+          DBT_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+
+      - name: Run unit tests
+        run: pytest tests/unit -v
+
+      - name: dbt test (schema tests)
+        run: dbt test --target ci --select tag:unit
+
+  deploy-staging:
+    needs: test
+    if: github.ref == 'refs/heads/develop'
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deploy to Staging
+        run: |
+          dbt run --target staging --full-refresh
+          dbt test --target staging
+        env:
+          DBT_TOKEN: ${{ secrets.STAGING_DBT_TOKEN }}
+
+  deploy-production:
+    needs: test
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deploy to Production
+        run: |
+          dbt run --target prod
+          dbt test --target prod
+        env:
+          DBT_TOKEN: ${{ secrets.PROD_DBT_TOKEN }}</pre></code>
+                </div>
+
+                <h3>Terraform Infrastructure</h3>
+                <div class="code-block">
+                    <span class="code-label">// terraform/modules/databricks/main.tf</span>
+                    <code><pre>
+terraform {
+  backend "azurerm" {
+    resource_group_name  = "rg-terraform-state"
+    storage_account_name = "tfstateenergy"
+    container_name       = "tfstate"
+    key                  = "databricks.tfstate"
+  }
+}
+
+module "databricks_workspace" {
+  source = "./modules/databricks-workspace"
+
+  for_each = var.environments
+
+  workspace_name = "dbw-${var.project}-${each.key}"
+  resource_group = azurerm_resource_group.main[each.key].name
+  location       = var.location
+  sku            = each.value.sku
+
+  # Network configuration
+  vnet_id              = module.networking[each.key].vnet_id
+  private_subnet_name  = module.networking[each.key].private_subnet
+  public_subnet_name   = module.networking[each.key].public_subnet
+
+  # Unity Catalog
+  metastore_id = databricks_metastore.main.id
+
+  tags = merge(var.common_tags, {
+    Environment = each.key
+  })
+}
+
+resource "databricks_cluster" "shared" {
+  for_each = var.environments
+
+  cluster_name            = "shared-${each.key}"
+  spark_version           = var.spark_version
+  node_type_id            = each.value.node_type
+  autotermination_minutes = each.value.auto_terminate
+
+  autoscale {
+    min_workers = each.value.min_workers
+    max_workers = each.value.max_workers
+  }
+
+  spark_conf = {
+    "spark.databricks.delta.preview.enabled" = "true"
+  }
+}</pre></code>
+                </div>
+
+                <h3>Docker Containerization</h3>
+                <div class="code-block">
+                    <span class="code-label">// Dockerfile - Airflow with custom operators</span>
+                    <code><pre>
+FROM apache/airflow:2.7.0-python3.10
+
+USER root
+RUN apt-get update && apt-get install -y \
+    gcc \
+    python3-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+USER airflow
+
+# Install custom requirements
+COPY requirements.txt /requirements.txt
+RUN pip install --no-cache-dir -r /requirements.txt
+
+# Install custom operators package
+COPY dist/energy_operators-*.whl /tmp/
+RUN pip install /tmp/energy_operators-*.whl
+
+# Copy DAGs and plugins
+COPY dags/ /opt/airflow/dags/
+COPY plugins/ /opt/airflow/plugins/
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
+    CMD ["python", "-c", "from airflow.models import DagBag; d = DagBag(); assert not d.import_errors"]</pre></code>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="container">
+                <h2><span class="section-number">04</span> Technology Stack</h2>
+                <div class="tech-grid">
+                    <div class="tech-item">
+                        <h4>GITHUB ACTIONS</h4>
+                        <p>CI/CD workflows for automated testing and deployment</p>
+                    </div>
+                    <div class="tech-item">
+                        <h4>TERRAFORM</h4>
+                        <p>Infrastructure as Code for Azure and Databricks resources</p>
+                    </div>
+                    <div class="tech-item">
+                        <h4>DOCKER</h4>
+                        <p>Containerization for consistent, reproducible environments</p>
+                    </div>
+                    <div class="tech-item">
+                        <h4>ARGOCD</h4>
+                        <p>GitOps continuous delivery for Kubernetes workloads</p>
+                    </div>
+                    <div class="tech-item">
+                        <h4>HELM</h4>
+                        <p>Kubernetes package manager for application deployment</p>
+                    </div>
+                    <div class="tech-item">
+                        <h4>SQLFLUFF</h4>
+                        <p>SQL linter for consistent code style and best practices</p>
+                    </div>
+                    <div class="tech-item">
+                        <h4>PYTEST</h4>
+                        <p>Python testing framework for unit and integration tests</p>
+                    </div>
+                    <div class="tech-item">
+                        <h4>PROMETHEUS/GRAFANA</h4>
+                        <p>Monitoring and observability for pipeline health</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="container">
+                <h2><span class="section-number">05</span> Results & Impact</h2>
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-value">90%</div>
+                        <div class="metric-label">Faster Deployments</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">95%</div>
+                        <div class="metric-label">Test Coverage</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">50+</div>
+                        <div class="metric-label">Pipelines Automated</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">99%</div>
+                        <div class="metric-label">Deployment Success</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">&lt;5min</div>
+                        <div class="metric-label">Rollback Time</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">100%</div>
+                        <div class="metric-label">IaC Coverage</div>
+                    </div>
+                </div>
+
+                <h3>Business Outcomes</h3>
+                <ul>
+                    <li>Deployment frequency increased from bi-weekly to multiple times per day</li>
+                    <li>Production incidents reduced by 75% through automated testing</li>
+                    <li>Complete infrastructure audit trail through Git history</li>
+                    <li>Instant rollback capability eliminated extended downtime</li>
+                    <li>New team members productive within days instead of weeks</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="container">
+                <h2><span class="section-number">06</span> Key Learnings</h2>
+                <ul>
+                    <li>Test data management is often harder than the CI/CD pipeline itself</li>
+                    <li>Feature flags enable safe production deployments without feature branches</li>
+                    <li>Terraform state management requires careful planning for team collaboration</li>
+                    <li>Docker multi-stage builds significantly reduce image sizes and build times</li>
+                    <li>GitOps with ArgoCD provides superior visibility into deployment state</li>
+                </ul>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Abhinav Verma - Lead Data Engineer</p>
+        </div>
+    </footer>
+</body>
+</html>

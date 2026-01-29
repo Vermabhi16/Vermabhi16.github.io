@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enterprise Data Lake Platform - Abhinav Verma</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0e17;
+            --bg-secondary: #131824;
+            --bg-card: #1a1f2e;
+            --accent-primary: #00d9ff;
+            --accent-secondary: #00ff88;
+            --text-primary: #e8eaed;
+            --text-secondary: #9ca3af;
+            --text-tertiary: #6b7280;
+            --border: #2d3748;
+            --gradient-1: linear-gradient(135deg, #00d9ff 0%, #0066ff 100%);
+            --gradient-2: linear-gradient(135deg, #00ff88 0%, #00d9ff 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                linear-gradient(rgba(0, 217, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 217, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header */
+        header {
+            padding: 1.5rem 0;
+            border-bottom: 1px solid var(--border);
+            background: rgba(10, 14, 23, 0.95);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .back-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--accent-primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            gap: 0.75rem;
+        }
+
+        .logo {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.25rem;
+            font-weight: 700;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Hero Section */
+        .project-hero {
+            padding: 4rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .project-meta {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .project-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            padding: 0.35rem 0.75rem;
+            border-radius: 20px;
+            background: rgba(0, 217, 255, 0.1);
+            color: var(--accent-primary);
+            border: 1px solid rgba(0, 217, 255, 0.3);
+        }
+
+        .project-tag.industry {
+            background: rgba(0, 255, 136, 0.1);
+            color: var(--accent-secondary);
+            border-color: rgba(0, 255, 136, 0.3);
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        h1 .highlight {
+            background: var(--gradient-2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .project-intro {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            line-height: 1.8;
+        }
+
+        /* Content Sections */
+        .content-section {
+            padding: 4rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .content-section:last-child {
+            border-bottom: none;
+        }
+
+        h2 {
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        h2 .section-number {
+            color: var(--accent-primary);
+            font-family: 'JetBrains Mono', monospace;
+            margin-right: 0.5rem;
+        }
+
+        h3 {
+            font-size: 1.25rem;
+            margin: 2rem 0 1rem;
+            color: var(--accent-secondary);
+        }
+
+        p {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            line-height: 1.8;
+        }
+
+        /* Architecture Diagram */
+        .architecture-diagram {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            overflow-x: auto;
+        }
+
+        .architecture-diagram pre {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--accent-primary);
+            line-height: 1.4;
+            margin: 0;
+        }
+
+        /* Tech Stack Grid */
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .tech-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.25rem;
+            transition: all 0.3s ease;
+        }
+
+        .tech-item:hover {
+            border-color: var(--accent-primary);
+            transform: translateY(-2px);
+        }
+
+        .tech-item h4 {
+            font-size: 0.875rem;
+            color: var(--accent-secondary);
+            margin-bottom: 0.5rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .tech-item p {
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        /* Lists */
+        ul {
+            list-style: none;
+            margin: 1rem 0;
+        }
+
+        ul li {
+            color: var(--text-secondary);
+            padding-left: 1.5rem;
+            margin-bottom: 0.75rem;
+            position: relative;
+        }
+
+        ul li::before {
+            content: '>';
+            position: absolute;
+            left: 0;
+            color: var(--accent-primary);
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: bold;
+        }
+
+        /* Metrics */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .metric-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: var(--gradient-2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .metric-label {
+            font-size: 0.875rem;
+            color: var(--text-tertiary);
+            margin-top: 0.5rem;
+        }
+
+        /* Code blocks */
+        .code-block {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+        }
+
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--text-primary);
+        }
+
+        .code-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--accent-secondary);
+            margin-bottom: 0.75rem;
+            display: block;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+        footer p {
+            color: var(--text-tertiary);
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .architecture-diagram pre {
+                font-size: 0.65rem;
+            }
+
+            .metric-value {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="../index.html" class="back-link">
+                    <span>&larr;</span> Back to Portfolio
+                </a>
+                <div class="logo">&lt;ABHINAV/&gt;</div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="project-hero">
+            <div class="container">
+                <div class="project-meta">
+                    <span class="project-tag">Data Lake</span>
+                    <span class="project-tag">Azure</span>
+                    <span class="project-tag">Databricks</span>
+                    <span class="project-tag industry">Leading FMCG Company</span>
+                </div>
+                <h1>Enterprise <span class="highlight">Data Lake Platform</span></h1>
+                <p class="project-intro">
+                    Designed and implemented a comprehensive enterprise data lake platform for a Fortune 500 FMCG company,
+                    consolidating data from 50+ source systems across manufacturing, supply chain, sales, and finance domains
+                    to enable advanced analytics and machine learning capabilities at scale.
+                </p>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="container">
+                <h2><span class="section-number">01</span> Business Challenge</h2>
+                <p>
+                    The organization faced significant challenges with siloed data across multiple business units,
+                    legacy on-premises systems, and inability to perform cross-functional analytics. Key pain points included:
+                </p>
+                <ul>
+                    <li>Data scattered across 50+ source systems with no unified view</li>
+                    <li>ETL processes taking 18+ hours for daily batch processing</li>
+                    <li>No support for real-time analytics or machine learning workloads</li>
+                    <li>High infrastructure costs with underutilized on-premises data centers</li>
+                    <li>Limited data governance and lineage tracking capabilities</li>
+                    <li>Inability to scale during peak business periods</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="container">
+                <h2><span class="section-number">02</span> Solution Architecture</h2>
+                <p>
+                    Architected a modern lakehouse platform using Azure Data Lake Storage Gen2 as the foundation,
+                    with Databricks for data processing and Delta Lake for ACID-compliant storage. The solution
+                    implements the medallion architecture pattern for data organization and quality.
+                </p>
+
+                <div class="architecture-diagram">
+                    <pre>
++--------------------------------------------------------------------------------------------------+
+|                                    ENTERPRISE DATA LAKE PLATFORM                                   |
++--------------------------------------------------------------------------------------------------+
+|                                                                                                    |
+|   DATA SOURCES                        INGESTION LAYER                        STORAGE LAYER        |
+|   +----------------+                  +------------------+                   +------------------+ |
+|   | SAP ERP        |----+             |                  |                   |                  | |
+|   +----------------+    |             |  Azure Data      |                   |  ADLS Gen2       | |
+|   | Salesforce CRM |----+------------>|  Factory         |------------------>|  (Bronze Layer)  | |
+|   +----------------+    |             |  - Pipelines     |                   |  - Raw Data      | |
+|   | Oracle DB      |----+             |  - Triggers      |                   |  - Parquet       | |
+|   +----------------+    |             |  - Watermarks    |                   |                  | |
+|   | IoT Sensors    |----+             +------------------+                   +--------+---------+ |
+|   +----------------+    |                     |                                       |           |
+|   | APIs/Webhooks  |----+                     |                                       v           |
+|   +----------------+    |             +------------------+                   +------------------+ |
+|   | Flat Files     |----+             |  Event Hubs      |                   |  Delta Lake      | |
+|   +----------------+                  |  (Streaming)     |                   |  (Silver Layer)  | |
+|                                       +------------------+                   |  - Cleansed      | |
+|                                                                              |  - Validated     | |
+|                                                                              |  - Deduplicated  | |
+|   PROCESSING LAYER                                                           +--------+---------+ |
+|   +--------------------------------------------------------------------------------+  |           |
+|   |                           AZURE DATABRICKS                                     |  |           |
+|   |  +------------------+  +------------------+  +------------------+              |  v           |
+|   |  | Bronze -> Silver |  | Silver -> Gold   |  | ML Workloads     |              | +---------+ |
+|   |  | - Data Quality   |  | - Aggregations   |  | - Feature Store  |              | | Gold    | |
+|   |  | - Schema Enforce |  | - Business Logic |  | - Model Training |              | | Layer   | |
+|   |  | - Deduplication  |  | - Dimensional    |  | - MLflow         |              | +---------+ |
+|   |  +------------------+  +------------------+  +------------------+              |             |
+|   +--------------------------------------------------------------------------------+             |
+|                                                                                                    |
+|   SERVING LAYER                              GOVERNANCE                                           |
+|   +------------------+  +------------------+  +------------------+  +------------------+          |
+|   | Azure Synapse    |  | Power BI         |  | Unity Catalog    |  | Azure Purview    |          |
+|   | - SQL Analytics  |  | - Dashboards     |  | - Data Catalog   |  | - Data Lineage   |          |
+|   | - Serverless SQL |  | - Reports        |  | - Access Control |  | - Classification |          |
+|   +------------------+  +------------------+  +------------------+  +------------------+          |
+|                                                                                                    |
++--------------------------------------------------------------------------------------------------+
+                    </pre>
+                </div>
+
+                <h3>Key Architectural Decisions</h3>
+                <ul>
+                    <li>Medallion architecture (Bronze/Silver/Gold) for incremental data quality improvement</li>
+                    <li>Delta Lake for ACID transactions, time travel, and schema evolution</li>
+                    <li>Unity Catalog for unified data governance across all workspaces</li>
+                    <li>Auto Loader for scalable, incremental file ingestion</li>
+                    <li>Structured Streaming for near-real-time processing requirements</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="container">
+                <h2><span class="section-number">03</span> Technical Implementation</h2>
+
+                <h3>Data Ingestion Framework</h3>
+                <p>
+                    Built a metadata-driven ingestion framework using Azure Data Factory with parameterized pipelines
+                    that could onboard new data sources through configuration rather than code changes.
+                </p>
+
+                <div class="code-block">
+                    <span class="code-label">// Databricks Auto Loader Configuration</span>
+                    <code><pre>
+spark.readStream
+    .format("cloudFiles")
+    .option("cloudFiles.format", "parquet")
+    .option("cloudFiles.schemaLocation", schema_path)
+    .option("cloudFiles.schemaEvolutionMode", "addNewColumns")
+    .option("cloudFiles.inferColumnTypes", "true")
+    .load(source_path)
+    .writeStream
+    .format("delta")
+    .option("checkpointLocation", checkpoint_path)
+    .option("mergeSchema", "true")
+    .trigger(availableNow=True)
+    .toTable(f"bronze.{table_name}")</pre></code>
+                </div>
+
+                <h3>Delta Lake Optimization</h3>
+                <div class="code-block">
+                    <span class="code-label">// Delta Table Optimization Strategy</span>
+                    <code><pre>
+-- Z-Order clustering for query optimization
+OPTIMIZE gold.sales_transactions
+ZORDER BY (transaction_date, store_id, product_category);
+
+-- Liquid clustering for automatic file management
+ALTER TABLE gold.customer_360
+CLUSTER BY (customer_segment, region);
+
+-- Table maintenance automation
+VACUUM gold.sales_transactions RETAIN 168 HOURS;</pre></code>
+                </div>
+
+                <h3>Infrastructure as Code</h3>
+                <div class="code-block">
+                    <span class="code-label">// Terraform - Databricks Workspace Configuration</span>
+                    <code><pre>
+resource "azurerm_databricks_workspace" "main" {
+  name                        = "dbw-${var.environment}-${var.project}"
+  resource_group_name         = azurerm_resource_group.main.name
+  location                    = azurerm_resource_group.main.location
+  sku                         = "premium"
+  managed_resource_group_name = "rg-dbw-managed-${var.environment}"
+
+  custom_parameters {
+    no_public_ip        = true
+    virtual_network_id  = azurerm_virtual_network.main.id
+    private_subnet_name = azurerm_subnet.private.name
+    public_subnet_name  = azurerm_subnet.public.name
+  }
+}
+
+resource "databricks_cluster" "shared" {
+  cluster_name            = "shared-analytics-cluster"
+  spark_version           = "13.3.x-scala2.12"
+  node_type_id            = "Standard_DS4_v2"
+  autotermination_minutes = 30
+
+  autoscale {
+    min_workers = 2
+    max_workers = 16
+  }
+}</pre></code>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="container">
+                <h2><span class="section-number">04</span> Technology Stack</h2>
+                <div class="tech-grid">
+                    <div class="tech-item">
+                        <h4>AZURE DATA LAKE GEN2</h4>
+                        <p>Hierarchical namespace storage for petabyte-scale data with fine-grained access control</p>
+                    </div>
+                    <div class="tech-item">
+                        <h4>AZURE DATABRICKS</h4>
+                        <p>Unified analytics platform for data engineering, data science, and machine learning</p>
+                    </div>
+                    <div class="tech-item">
+                        <h4>DELTA LAKE</h4>
+                        <p>Open-source storage layer with ACID transactions, schema enforcement, and time travel</p>
+                    </div>
+                    <div class="tech-item">
+                        <h4>AZURE DATA FACTORY</h4>
+                        <p>Cloud ETL service for data integration and orchestration across hybrid environments</p>
+                    </div>
+                    <div class="tech-item">
+                        <h4>UNITY CATALOG</h4>
+                        <p>Unified governance solution for data and AI assets with fine-grained access control</p>
+                    </div>
+                    <div class="tech-item">
+                        <h4>TERRAFORM</h4>
+                        <p>Infrastructure as Code for consistent, version-controlled resource deployment</p>
+                    </div>
+                    <div class="tech-item">
+                        <h4>AZURE DEVOPS</h4>
+                        <p>CI/CD pipelines for automated testing, deployment, and release management</p>
+                    </div>
+                    <div class="tech-item">
+                        <h4>PYSPARK</h4>
+                        <p>Distributed data processing for large-scale transformations and analytics</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="container">
+                <h2><span class="section-number">05</span> Results & Impact</h2>
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-value">50+</div>
+                        <div class="metric-label">Data Sources Integrated</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">85%</div>
+                        <div class="metric-label">Reduction in ETL Time</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">15PB</div>
+                        <div class="metric-label">Data Under Management</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">40%</div>
+                        <div class="metric-label">Infrastructure Cost Savings</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">2000+</div>
+                        <div class="metric-label">Active Data Users</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">99.9%</div>
+                        <div class="metric-label">Platform Availability</div>
+                    </div>
+                </div>
+
+                <h3>Business Outcomes</h3>
+                <ul>
+                    <li>Enabled cross-functional analytics that identified $15M in supply chain optimization opportunities</li>
+                    <li>Reduced time-to-insight from weeks to hours for business analysts</li>
+                    <li>Established foundation for ML/AI initiatives including demand forecasting and customer segmentation</li>
+                    <li>Achieved compliance with data governance requirements across all business units</li>
+                    <li>Created self-service analytics capability for 2000+ business users</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="container">
+                <h2><span class="section-number">06</span> Key Learnings</h2>
+                <ul>
+                    <li>Early investment in data quality frameworks pays dividends throughout the platform lifecycle</li>
+                    <li>Metadata-driven architectures significantly accelerate onboarding of new data sources</li>
+                    <li>Unity Catalog provides essential governance capabilities but requires careful planning for migration</li>
+                    <li>Autoscaling clusters with proper spot instance configuration can reduce costs by 60-70%</li>
+                    <li>Delta Lake's time travel feature is invaluable for debugging and audit requirements</li>
+                </ul>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Abhinav Verma - Lead Data Engineer</p>
+        </div>
+    </footer>
+</body>
+</html>

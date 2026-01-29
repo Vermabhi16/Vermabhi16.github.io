@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hybrid Cloud Data Platform - Abhinav Verma</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg-primary: #0a0e17; --bg-secondary: #131824; --bg-card: #1a1f2e; --accent-primary: #00d9ff; --accent-secondary: #00ff88; --text-primary: #e8eaed; --text-secondary: #9ca3af; --text-tertiary: #6b7280; --border: #2d3748; --gradient-1: linear-gradient(135deg, #00d9ff 0%, #0066ff 100%); --gradient-2: linear-gradient(135deg, #00ff88 0%, #00d9ff 100%); }
+        * { margin: 0; padding: 0; box-sizing: border-box; } body { font-family: 'Outfit', sans-serif; background: var(--bg-primary); color: var(--text-primary); line-height: 1.6; overflow-x: hidden; }
+        body::before { content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: linear-gradient(rgba(0, 217, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 217, 255, 0.03) 1px, transparent 1px); background-size: 50px 50px; z-index: 0; pointer-events: none; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; position: relative; z-index: 1; }
+        header { padding: 1.5rem 0; border-bottom: 1px solid var(--border); background: rgba(10, 14, 23, 0.95); backdrop-filter: blur(10px); position: sticky; top: 0; z-index: 100; }
+        .header-content { display: flex; justify-content: space-between; align-items: center; }
+        .back-link { display: flex; align-items: center; gap: 0.5rem; color: var(--accent-primary); text-decoration: none; font-weight: 500; transition: all 0.3s ease; }
+        .back-link:hover { gap: 0.75rem; } .logo { font-family: 'JetBrains Mono', monospace; font-size: 1.25rem; font-weight: 700; background: var(--gradient-1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .project-hero { padding: 4rem 0; border-bottom: 1px solid var(--border); } .project-meta { display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+        .project-tag { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; padding: 0.35rem 0.75rem; border-radius: 20px; background: rgba(0, 217, 255, 0.1); color: var(--accent-primary); border: 1px solid rgba(0, 217, 255, 0.3); }
+        .project-tag.industry { background: rgba(0, 255, 136, 0.1); color: var(--accent-secondary); border-color: rgba(0, 255, 136, 0.3); }
+        h1 { font-size: 3rem; font-weight: 700; margin-bottom: 1.5rem; line-height: 1.2; } h1 .highlight { background: var(--gradient-2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .project-intro { font-size: 1.25rem; color: var(--text-secondary); max-width: 800px; line-height: 1.8; }
+        .content-section { padding: 4rem 0; border-bottom: 1px solid var(--border); } .content-section:last-child { border-bottom: none; }
+        h2 { font-size: 1.75rem; margin-bottom: 1.5rem; color: var(--text-primary); } h2 .section-number { color: var(--accent-primary); font-family: 'JetBrains Mono', monospace; margin-right: 0.5rem; }
+        h3 { font-size: 1.25rem; margin: 2rem 0 1rem; color: var(--accent-secondary); } p { color: var(--text-secondary); margin-bottom: 1rem; line-height: 1.8; }
+        .architecture-diagram { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 2rem; margin: 2rem 0; overflow-x: auto; }
+        .architecture-diagram pre { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--accent-primary); line-height: 1.4; margin: 0; }
+        .tech-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 2rem 0; }
+        .tech-item { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem; transition: all 0.3s ease; }
+        .tech-item:hover { border-color: var(--accent-primary); transform: translateY(-2px); }
+        .tech-item h4 { font-size: 0.875rem; color: var(--accent-secondary); margin-bottom: 0.5rem; font-family: 'JetBrains Mono', monospace; }
+        .tech-item p { font-size: 0.9rem; margin: 0; }
+        ul { list-style: none; margin: 1rem 0; } ul li { color: var(--text-secondary); padding-left: 1.5rem; margin-bottom: 0.75rem; position: relative; }
+        ul li::before { content: '>'; position: absolute; left: 0; color: var(--accent-primary); font-family: 'JetBrains Mono', monospace; font-weight: bold; }
+        .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1.5rem; margin: 2rem 0; }
+        .metric-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; text-align: center; }
+        .metric-value { font-size: 2.5rem; font-weight: 700; background: var(--gradient-2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-family: 'JetBrains Mono', monospace; }
+        .metric-label { font-size: 0.875rem; color: var(--text-tertiary); margin-top: 0.5rem; }
+        .code-block { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; margin: 1.5rem 0; overflow-x: auto; }
+        .code-block code { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: var(--text-primary); }
+        .code-label { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--accent-secondary); margin-bottom: 0.75rem; display: block; }
+        footer { background: var(--bg-secondary); border-top: 1px solid var(--border); padding: 2rem 0; text-align: center; margin-top: 4rem; }
+        footer p { color: var(--text-tertiary); font-size: 0.9rem; margin: 0; }
+        @media (max-width: 768px) { h1 { font-size: 2rem; } .architecture-diagram pre { font-size: 0.55rem; } .metric-value { font-size: 2rem; } }
+    </style>
+</head>
+<body>
+    <header><div class="container"><div class="header-content"><a href="../index.html" class="back-link"><span>&larr;</span> Back to Portfolio</a><div class="logo">&lt;ABHINAV/&gt;</div></div></div></header>
+    <main>
+        <section class="project-hero">
+            <div class="container">
+                <div class="project-meta">
+                    <span class="project-tag">Azure</span>
+                    <span class="project-tag">AWS</span>
+                    <span class="project-tag">Multi-Cloud</span>
+                    <span class="project-tag industry">Insurance Enterprise</span>
+                </div>
+                <h1>Hybrid <span class="highlight">Multi-Cloud Data Platform</span></h1>
+                <p class="project-intro">
+                    Architected a hybrid multi-cloud data platform spanning Azure, AWS, and on-premises data centers
+                    for a global insurance company. The solution enables unified data access, cross-cloud analytics,
+                    and regulatory compliance across 40 countries while optimizing costs and avoiding vendor lock-in.
+                </p>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="container">
+                <h2><span class="section-number">01</span> Business Challenge</h2>
+                <ul>
+                    <li>M&A activity resulted in data assets split between AWS and Azure cloud environments</li>
+                    <li>Regulatory requirements mandating data residency in specific geographic regions</li>
+                    <li>Legacy on-premises mainframe systems requiring integration with cloud analytics</li>
+                    <li>Vendor lock-in concerns preventing full commitment to single cloud provider</li>
+                    <li>Need for unified governance and security across all environments</li>
+                    <li>Cross-cloud data movement costs impacting operational budgets</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="container">
+                <h2><span class="section-number">02</span> Solution Architecture</h2>
+                <div class="architecture-diagram">
+                    <pre>
++------------------------------------------------------------------------------------------------------------------------------+
+|                                        HYBRID MULTI-CLOUD DATA PLATFORM                                                       |
++------------------------------------------------------------------------------------------------------------------------------+
+|                                                                                                                               |
+|  ON-PREMISES                          AZURE (PRIMARY)                              AWS (SECONDARY)                           |
+|  +-----------------+                  +--------------------------------+           +--------------------------------+         |
+|  | Mainframe       |                  |         AZURE REGION           |           |         AWS REGION             |         |
+|  | - Policy Admin  |                  |  +-------------------------+   |           |  +-------------------------+   |         |
+|  | - Claims        |                  |  | Azure Data Lake Gen2    |   |           |  | Amazon S3               |   |         |
+|  | - Billing       |  ExpressRoute    |  | - Delta Lake            |   |  Direct   |  | - Apache Iceberg        |   |         |
+|  +-----------------+  <-------------->|  | - Unity Catalog         |   |  Connect  |  | - AWS Glue Catalog      |   |         |
+|         |                             |  +-------------------------+   |  <------->|  +-------------------------+   |         |
+|         |                             |             |                   |           |             |                   |         |
+|  +-----------------+                  |             v                   |           |             v                   |         |
+|  | Data Center     |                  |  +-------------------------+   |           |  +-------------------------+   |         |
+|  | - SQL Server    |                  |  | Databricks              |   |           |  | EMR / Glue              |   |         |
+|  | - Oracle        |                  |  | - Cross-cloud queries   |   |           |  | - Spark processing      |   |         |
+|  | - File Shares   |                  |  | - Delta Sharing         |   |           |  | - ETL Jobs              |   |         |
+|  +-----------------+                  |  +-------------------------+   |           |  +-------------------------+   |         |
+|                                       |             |                   |           |             |                   |         |
+|                                       |             v                   |           |             v                   |         |
+|  NETWORK LAYER                        |  +-------------------------+   |           |  +-------------------------+   |         |
+|  +-----------------+                  |  | Synapse Analytics       |   |           |  | Redshift Serverless     |   |         |
+|  | Azure           |                  |  | - Serverless SQL        |   |           |  | - Data Warehouse        |   |         |
+|  | ExpressRoute    |                  |  | - Dedicated Pools       |   |           |  | - Federated Queries     |   |         |
+|  +-----------------+                  |  +-------------------------+   |           |  +-------------------------+   |         |
+|  | AWS Direct      |                  +--------------------------------+           +--------------------------------+         |
+|  | Connect         |                                                                                                          |
+|  +-----------------+                                                                                                          |
+|  | Site-to-Site    |                                                                                                          |
+|  | VPN (Backup)    |                                                                                                          |
+|  +-----------------+                                                                                                          |
+|                                                                                                                               |
+|  UNIFIED GOVERNANCE                                                                                                          |
+|  +---------------------------+  +---------------------------+  +---------------------------+  +---------------------------+ |
+|  | Azure Purview             |  | HashiCorp Vault           |  | Apache Atlas              |  | Terraform Cloud           | |
+|  | - Cross-cloud catalog     |  | - Secrets Management      |  | - Data Lineage            |  | - Multi-cloud IaC         | |
+|  | - Data Classification     |  | - Cross-cloud auth        |  | - Metadata Integration    |  | - Drift Detection         | |
+|  +---------------------------+  +---------------------------+  +---------------------------+  +---------------------------+ |
+|                                                                                                                               |
+|  CROSS-CLOUD ORCHESTRATION                                                                                                   |
+|  +---------------------------+  +---------------------------+  +---------------------------+                                 |
+|  | Astronomer (Airflow)      |  | Delta Sharing             |  | Starburst Galaxy          |                                 |
+|  | - Cross-cloud DAGs        |  | - Secure data sharing     |  | - Federated queries       |                                 |
+|  | - Unified monitoring      |  | - No data movement        |  | - Cross-platform SQL      |                                 |
+|  +---------------------------+  +---------------------------+  +---------------------------+                                 |
+|                                                                                                                               |
++------------------------------------------------------------------------------------------------------------------------------+
+                    </pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="container">
+                <h2><span class="section-number">03</span> Technical Implementation</h2>
+                <h3>Cross-Cloud Data Access with Starburst</h3>
+                <div class="code-block">
+                    <span class="code-label">// Starburst - Federated Query Across Clouds</span>
+                    <code><pre>
+-- Query joining Azure and AWS data sources seamlessly
+SELECT
+    c.customer_id,
+    c.customer_name,
+    c.region,
+    p.policy_number,
+    p.premium_amount,
+    cl.claim_count,
+    cl.total_claim_amount
+FROM azure_delta.insurance.dim_customers c
+JOIN aws_iceberg.policies.fct_policies p
+    ON c.customer_id = p.customer_id
+LEFT JOIN (
+    SELECT customer_id, COUNT(*) as claim_count, SUM(amount) as total_claim_amount
+    FROM onprem_oracle.claims.claims_history
+    GROUP BY customer_id
+) cl ON c.customer_id = cl.customer_id
+WHERE c.region IN ('EMEA', 'APAC')
+  AND p.policy_status = 'ACTIVE';</pre></code>
+                </div>
+
+                <h3>Multi-Cloud Terraform</h3>
+                <div class="code-block">
+                    <span class="code-label">// Terraform - Multi-Cloud Infrastructure</span>
+                    <code><pre>
+# Azure Provider
+provider "azurerm" {
+  features {}
+  subscription_id = var.azure_subscription_id
+}
+
+# AWS Provider
+provider "aws" {
+  region = var.aws_region
+}
+
+# Databricks on Azure
+module "azure_databricks" {
+  source = "./modules/azure-databricks"
+  providers = { azurerm = azurerm }
+  workspace_name = "insurance-analytics"
+  vnet_id = module.azure_networking.vnet_id
+}
+
+# EMR on AWS
+module "aws_emr" {
+  source = "./modules/aws-emr"
+  providers = { aws = aws }
+  cluster_name = "insurance-processing"
+  vpc_id = module.aws_networking.vpc_id
+}
+
+# Cross-cloud networking
+module "cross_cloud_connectivity" {
+  source = "./modules/hybrid-connectivity"
+  azure_vnet_id = module.azure_networking.vnet_id
+  aws_vpc_id = module.aws_networking.vpc_id
+  direct_connect_gateway_id = var.dx_gateway_id
+  express_route_circuit_id = var.er_circuit_id
+}</pre></code>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="container">
+                <h2><span class="section-number">04</span> Technology Stack</h2>
+                <div class="tech-grid">
+                    <div class="tech-item"><h4>AZURE DATA LAKE</h4><p>Primary data lake with Delta Lake format and Unity Catalog</p></div>
+                    <div class="tech-item"><h4>AWS S3 + ICEBERG</h4><p>Secondary data lake with Apache Iceberg for open table format</p></div>
+                    <div class="tech-item"><h4>STARBURST GALAXY</h4><p>Federated query engine for cross-cloud analytics</p></div>
+                    <div class="tech-item"><h4>DELTA SHARING</h4><p>Secure cross-organization data sharing protocol</p></div>
+                    <div class="tech-item"><h4>HASHICORP VAULT</h4><p>Unified secrets management across all environments</p></div>
+                    <div class="tech-item"><h4>TERRAFORM CLOUD</h4><p>Multi-cloud Infrastructure as Code with drift detection</p></div>
+                    <div class="tech-item"><h4>ASTRONOMER</h4><p>Managed Airflow for cross-cloud workflow orchestration</p></div>
+                    <div class="tech-item"><h4>AZURE PURVIEW</h4><p>Unified data governance and catalog across clouds</p></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="container">
+                <h2><span class="section-number">05</span> Results & Impact</h2>
+                <div class="metrics-grid">
+                    <div class="metric-card"><div class="metric-value">40</div><div class="metric-label">Countries Covered</div></div>
+                    <div class="metric-card"><div class="metric-value">3</div><div class="metric-label">Cloud Platforms</div></div>
+                    <div class="metric-card"><div class="metric-value">65%</div><div class="metric-label">Cost Optimization</div></div>
+                    <div class="metric-card"><div class="metric-value">100%</div><div class="metric-label">Data Residency Compliance</div></div>
+                    <div class="metric-card"><div class="metric-value">Zero</div><div class="metric-label">Vendor Lock-in</div></div>
+                    <div class="metric-card"><div class="metric-value">&lt;50ms</div><div class="metric-label">Cross-Cloud Latency</div></div>
+                </div>
+                <h3>Business Outcomes</h3>
+                <ul>
+                    <li>Unified analytics across M&A acquired assets without data migration</li>
+                    <li>Achieved 100% regulatory compliance for data residency requirements</li>
+                    <li>Cost optimization through workload placement on optimal cloud</li>
+                    <li>Future-proofed architecture avoiding single vendor dependency</li>
+                    <li>Enabled cross-regional analytics previously impossible</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="container">
+                <h2><span class="section-number">06</span> Key Learnings</h2>
+                <ul>
+                    <li>Open table formats (Delta, Iceberg) are essential for multi-cloud portability</li>
+                    <li>Network latency between clouds requires careful data placement strategy</li>
+                    <li>Unified governance tools must support all cloud environments</li>
+                    <li>Federated query engines eliminate most cross-cloud data movement needs</li>
+                    <li>ExpressRoute/Direct Connect are critical for production workloads</li>
+                </ul>
+            </div>
+        </section>
+    </main>
+    <footer><div class="container"><p>&copy; 2024 Abhinav Verma - Lead Data Engineer</p></div></footer>
+</body>
+</html>

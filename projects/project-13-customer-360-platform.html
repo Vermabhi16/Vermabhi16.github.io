@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer 360 Data Platform - Abhinav Verma</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg-primary: #0a0e17; --bg-secondary: #131824; --bg-card: #1a1f2e; --accent-primary: #00d9ff; --accent-secondary: #00ff88; --text-primary: #e8eaed; --text-secondary: #9ca3af; --text-tertiary: #6b7280; --border: #2d3748; --gradient-1: linear-gradient(135deg, #00d9ff 0%, #0066ff 100%); --gradient-2: linear-gradient(135deg, #00ff88 0%, #00d9ff 100%); }
+        * { margin: 0; padding: 0; box-sizing: border-box; } body { font-family: 'Outfit', sans-serif; background: var(--bg-primary); color: var(--text-primary); line-height: 1.6; } body::before { content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: linear-gradient(rgba(0, 217, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 217, 255, 0.03) 1px, transparent 1px); background-size: 50px 50px; z-index: 0; pointer-events: none; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; position: relative; z-index: 1; }
+        header { padding: 1.5rem 0; border-bottom: 1px solid var(--border); background: rgba(10, 14, 23, 0.95); backdrop-filter: blur(10px); position: sticky; top: 0; z-index: 100; } .header-content { display: flex; justify-content: space-between; align-items: center; } .back-link { display: flex; align-items: center; gap: 0.5rem; color: var(--accent-primary); text-decoration: none; } .logo { font-family: 'JetBrains Mono', monospace; font-size: 1.25rem; font-weight: 700; background: var(--gradient-1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .project-hero { padding: 4rem 0; border-bottom: 1px solid var(--border); } .project-meta { display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; } .project-tag { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; padding: 0.35rem 0.75rem; border-radius: 20px; background: rgba(0, 217, 255, 0.1); color: var(--accent-primary); border: 1px solid rgba(0, 217, 255, 0.3); } .project-tag.industry { background: rgba(0, 255, 136, 0.1); color: var(--accent-secondary); border-color: rgba(0, 255, 136, 0.3); }
+        h1 { font-size: 3rem; font-weight: 700; margin-bottom: 1.5rem; line-height: 1.2; } h1 .highlight { background: var(--gradient-2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; } .project-intro { font-size: 1.25rem; color: var(--text-secondary); max-width: 800px; line-height: 1.8; }
+        .content-section { padding: 4rem 0; border-bottom: 1px solid var(--border); } h2 { font-size: 1.75rem; margin-bottom: 1.5rem; } h2 .section-number { color: var(--accent-primary); font-family: 'JetBrains Mono', monospace; margin-right: 0.5rem; } h3 { font-size: 1.25rem; margin: 2rem 0 1rem; color: var(--accent-secondary); } p { color: var(--text-secondary); margin-bottom: 1rem; line-height: 1.8; }
+        .architecture-diagram { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 2rem; margin: 2rem 0; overflow-x: auto; } .architecture-diagram pre { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--accent-primary); line-height: 1.4; }
+        .tech-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 2rem 0; } .tech-item { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem; } .tech-item h4 { font-size: 0.875rem; color: var(--accent-secondary); margin-bottom: 0.5rem; font-family: 'JetBrains Mono', monospace; } .tech-item p { font-size: 0.9rem; margin: 0; }
+        ul { list-style: none; margin: 1rem 0; } ul li { color: var(--text-secondary); padding-left: 1.5rem; margin-bottom: 0.75rem; position: relative; } ul li::before { content: '>'; position: absolute; left: 0; color: var(--accent-primary); font-family: 'JetBrains Mono', monospace; }
+        .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1.5rem; margin: 2rem 0; } .metric-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; text-align: center; } .metric-value { font-size: 2.5rem; font-weight: 700; background: var(--gradient-2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-family: 'JetBrains Mono', monospace; } .metric-label { font-size: 0.875rem; color: var(--text-tertiary); margin-top: 0.5rem; }
+        .code-block { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; margin: 1.5rem 0; overflow-x: auto; } .code-block code { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: var(--text-primary); } .code-label { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--accent-secondary); margin-bottom: 0.75rem; display: block; }
+        footer { background: var(--bg-secondary); border-top: 1px solid var(--border); padding: 2rem 0; text-align: center; margin-top: 4rem; } footer p { color: var(--text-tertiary); font-size: 0.9rem; margin: 0; }
+        @media (max-width: 768px) { h1 { font-size: 2rem; } .architecture-diagram pre { font-size: 0.55rem; } .metric-value { font-size: 2rem; } }
+    </style>
+</head>
+<body>
+    <header><div class="container"><div class="header-content"><a href="../index.html" class="back-link"><span>&larr;</span> Back to Portfolio</a><div class="logo">&lt;ABHINAV/&gt;</div></div></div></header>
+    <main>
+        <section class="project-hero">
+            <div class="container">
+                <div class="project-meta">
+                    <span class="project-tag">Databricks</span>
+                    <span class="project-tag">Delta Lake</span>
+                    <span class="project-tag">ML</span>
+                    <span class="project-tag industry">Retail Chain</span>
+                </div>
+                <h1>Customer <span class="highlight">360 Data Platform</span></h1>
+                <p class="project-intro">
+                    Designed and built a unified Customer 360 platform for a major retail chain with 50M customers,
+                    integrating online, in-store, loyalty, and service interactions. The platform powers personalization,
+                    churn prediction, customer lifetime value modeling, and next-best-action recommendations.
+                </p>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="container">
+                <h2><span class="section-number">01</span> Business Challenge</h2>
+                <ul>
+                    <li>Customer data fragmented across e-commerce, POS, loyalty, and call center systems</li>
+                    <li>No unified customer identity across online and offline channels</li>
+                    <li>Marketing campaigns targeting wrong segments with 2% response rate</li>
+                    <li>Churn detected only after customers left, no predictive capability</li>
+                    <li>Customer lifetime value unknown, treating all customers equally</li>
+                    <li>Personalization limited to basic demographic segments</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="container">
+                <h2><span class="section-number">02</span> Solution Architecture</h2>
+                <div class="architecture-diagram">
+                    <pre>
++--------------------------------------------------------------------------------------------------------------+
+|                                      CUSTOMER 360 PLATFORM                                                    |
++--------------------------------------------------------------------------------------------------------------+
+|                                                                                                               |
+|  CUSTOMER TOUCHPOINTS              IDENTITY RESOLUTION               UNIFIED PROFILE                        |
+|  +------------------+              +----------------------+          +------------------------+              |
+|  | E-commerce       |              | IDENTITY GRAPH       |          |   GOLDEN CUSTOMER      |              |
+|  | - Browsing       |              |                      |          |   RECORD               |              |
+|  | - Purchases      |------------->| +----------------+   |          | +------------------+   |              |
+|  | - Cart Events    |              | | Deterministic  |   |          | | Demographics     |   |              |
+|  +------------------+              | | - Email Match  |   |--------->| | Contact Info     |   |              |
+|  | Mobile App       |              | | - Phone Match  |   |          | | Preferences      |   |              |
+|  | - App Events     |------------->| | - Loyalty ID   |   |          | +------------------+   |              |
+|  | - Location       |              | +----------------+   |          | +------------------+   |              |
+|  +------------------+              | | Probabilistic  |   |          | | Behavioral       |   |              |
+|  | In-Store POS     |              | | - Device Graph |   |          | | - Browse History |   |              |
+|  | - Transactions   |------------->| | - ML Matching  |   |          | | - Purchase Hist  |   |              |
+|  | - Returns        |              | +----------------+   |          | | - Channel Pref   |   |              |
+|  +------------------+              +----------------------+          | +------------------+   |              |
+|  | Call Center      |                                                | +------------------+   |              |
+|  | - Interactions   |                                                | | Computed Metrics |   |              |
+|  | - Complaints     |                                                | | - CLV Score      |   |              |
+|  +------------------+                                                | | - Churn Risk     |   |              |
+|  | Loyalty Program  |                                                | | - RFM Segment    |   |              |
+|  | - Points         |                                                | +------------------+   |              |
+|  | - Redemptions    |                                                +------------------------+              |
+|  +------------------+                                                          |                             |
+|                                                                                v                             |
+|  ML MODELS                                  FEATURE STORE                                                    |
+|  +----------------------+                  +----------------------+                                          |
+|  | DATABRICKS ML        |                  | FEAST FEATURE STORE  |                                          |
+|  | +----------------+   |                  | +----------------+   |                                          |
+|  | | Churn Predict  |   |<---------------->| | Customer Feats |   |                                          |
+|  | | - XGBoost      |   |                  | | - 500+ features|   |                                          |
+|  | +----------------+   |                  | | - Real-time    |   |                                          |
+|  | | CLV Model      |   |                  | | - Historical   |   |                                          |
+|  | | - Regression   |   |                  | +----------------+   |                                          |
+|  | +----------------+   |                  +----------------------+                                          |
+|  | | Next Best      |   |                                                                                    |
+|  | | Action         |   |                  ACTIVATION                                                        |
+|  | +----------------+   |                  +----------------------+                                          |
+|  +----------------------+                  | +----------------+   |                                          |
+|                                            | | Marketing CDP  |   |                                          |
+|                                            | +----------------+   |                                          |
+|                                            | | Personalization|   |                                          |
+|                                            | +----------------+   |                                          |
+|                                            +----------------------+                                          |
++--------------------------------------------------------------------------------------------------------------+
+                    </pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="container">
+                <h2><span class="section-number">03</span> Technical Implementation</h2>
+                <h3>Identity Resolution</h3>
+                <div class="code-block">
+                    <span class="code-label">// PySpark - Probabilistic Identity Matching</span>
+                    <code><pre>
+from graphframes import GraphFrame
+
+def build_identity_graph(interactions_df):
+    """Build identity graph and resolve to canonical customer IDs"""
+
+    # Create edges from deterministic matches
+    deterministic_edges = interactions_df.select(
+        col("source_id").alias("src"),
+        col("match_key").alias("dst"),
+        lit("deterministic").alias("match_type"),
+        lit(1.0).alias("confidence")
+    ).filter(col("match_key").isNotNull())
+
+    # Create edges from probabilistic matches
+    probabilistic_edges = (interactions_df
+        .alias("a")
+        .join(interactions_df.alias("b"),
+            (col("a.device_fingerprint") == col("b.device_fingerprint")) &
+            (col("a.source_id") != col("b.source_id")))
+        .select(
+            col("a.source_id").alias("src"),
+            col("b.source_id").alias("dst"),
+            lit("probabilistic").alias("match_type"),
+            calculate_match_score(col("a"), col("b")).alias("confidence")
+        )
+        .filter(col("confidence") > 0.85))
+
+    # Combine edges
+    all_edges = deterministic_edges.union(probabilistic_edges)
+
+    # Build graph and find connected components
+    vertices = interactions_df.select(col("source_id").alias("id")).distinct()
+    g = GraphFrame(vertices, all_edges)
+
+    # Connected components = customer clusters
+    clusters = g.connectedComponents()
+
+    return clusters.withColumnRenamed("component", "canonical_customer_id")</pre></code>
+                </div>
+
+                <h3>Feature Engineering</h3>
+                <div class="code-block">
+                    <span class="code-label">// PySpark - Customer Feature Generation</span>
+                    <code><pre>
+def generate_customer_features(customer_id):
+    """Generate 500+ features for each customer"""
+
+    # RFM Features
+    rfm_features = transactions.groupBy("customer_id").agg(
+        datediff(current_date(), max("transaction_date")).alias("recency_days"),
+        count("*").alias("frequency"),
+        sum("amount").alias("monetary_value"),
+        avg("amount").alias("avg_order_value"),
+        stddev("amount").alias("order_value_stddev")
+    )
+
+    # Behavioral Features
+    behavior_features = events.groupBy("customer_id").agg(
+        count(when(col("event_type") == "view", 1)).alias("total_page_views"),
+        count(when(col("event_type") == "cart_add", 1)).alias("total_cart_adds"),
+        countDistinct("session_id").alias("total_sessions"),
+        avg("session_duration").alias("avg_session_duration")
+    )
+
+    # Channel Preference Features
+    channel_features = transactions.groupBy("customer_id").agg(
+        sum(when(col("channel") == "online", col("amount"))).alias("online_spend"),
+        sum(when(col("channel") == "store", col("amount"))).alias("store_spend"),
+        count(when(col("channel") == "mobile", 1)).alias("mobile_transactions")
+    )
+
+    return rfm_features.join(behavior_features, "customer_id") \
+                       .join(channel_features, "customer_id")</pre></code>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="container">
+                <h2><span class="section-number">04</span> Technology Stack</h2>
+                <div class="tech-grid">
+                    <div class="tech-item"><h4>DATABRICKS</h4><p>Unified platform for data engineering and ML workloads</p></div>
+                    <div class="tech-item"><h4>DELTA LAKE</h4><p>Lakehouse storage with ACID transactions for customer data</p></div>
+                    <div class="tech-item"><h4>GRAPHFRAMES</h4><p>Graph processing for identity resolution and clustering</p></div>
+                    <div class="tech-item"><h4>FEAST</h4><p>Feature store for ML model training and serving</p></div>
+                    <div class="tech-item"><h4>MLFLOW</h4><p>ML lifecycle management and model registry</p></div>
+                    <div class="tech-item"><h4>XGBOOST</h4><p>Gradient boosting for churn and propensity models</p></div>
+                    <div class="tech-item"><h4>SEGMENT</h4><p>Customer data platform for activation</p></div>
+                    <div class="tech-item"><h4>BRAZE</h4><p>Marketing automation for personalized campaigns</p></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="container">
+                <h2><span class="section-number">05</span> Results & Impact</h2>
+                <div class="metrics-grid">
+                    <div class="metric-card"><div class="metric-value">50M</div><div class="metric-label">Unified Customer Profiles</div></div>
+                    <div class="metric-card"><div class="metric-value">92%</div><div class="metric-label">Identity Match Rate</div></div>
+                    <div class="metric-card"><div class="metric-value">8.5%</div><div class="metric-label">Campaign Response (from 2%)</div></div>
+                    <div class="metric-card"><div class="metric-value">35%</div><div class="metric-label">Churn Reduction</div></div>
+                    <div class="metric-card"><div class="metric-value">500+</div><div class="metric-label">ML Features</div></div>
+                    <div class="metric-card"><div class="metric-value">$120M</div><div class="metric-label">Incremental Revenue</div></div>
+                </div>
+                <h3>Business Outcomes</h3>
+                <ul>
+                    <li>Unified 50M customer profiles across all channels with 92% match accuracy</li>
+                    <li>Personalized campaigns increased response rates from 2% to 8.5%</li>
+                    <li>Proactive churn intervention reduced customer attrition by 35%</li>
+                    <li>CLV-based segmentation enabled differentiated service levels</li>
+                    <li>Next-best-action recommendations drove $120M incremental revenue</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="container">
+                <h2><span class="section-number">06</span> Key Learnings</h2>
+                <ul>
+                    <li>Identity resolution is foundational - invest heavily in graph-based matching</li>
+                    <li>Feature store is essential for consistent ML features across training and serving</li>
+                    <li>Start with deterministic matching before probabilistic approaches</li>
+                    <li>Privacy-by-design must be built in from the start, not bolted on</li>
+                    <li>Real-time activation requires careful latency planning in feature serving</li>
+                </ul>
+            </div>
+        </section>
+    </main>
+    <footer><div class="container"><p>&copy; 2024 Abhinav Verma - Lead Data Engineer</p></div></footer>
+</body>
+</html>

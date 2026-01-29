@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloud Data Warehouse with Snowflake & dbt - Abhinav Verma</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg-primary: #0a0e17; --bg-secondary: #131824; --bg-card: #1a1f2e; --accent-primary: #00d9ff; --accent-secondary: #00ff88; --text-primary: #e8eaed; --text-secondary: #9ca3af; --text-tertiary: #6b7280; --border: #2d3748; --gradient-1: linear-gradient(135deg, #00d9ff 0%, #0066ff 100%); --gradient-2: linear-gradient(135deg, #00ff88 0%, #00d9ff 100%); }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Outfit', sans-serif; background: var(--bg-primary); color: var(--text-primary); line-height: 1.6; overflow-x: hidden; }
+        body::before { content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: linear-gradient(rgba(0, 217, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 217, 255, 0.03) 1px, transparent 1px); background-size: 50px 50px; z-index: 0; pointer-events: none; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; position: relative; z-index: 1; }
+        header { padding: 1.5rem 0; border-bottom: 1px solid var(--border); background: rgba(10, 14, 23, 0.95); backdrop-filter: blur(10px); position: sticky; top: 0; z-index: 100; }
+        .header-content { display: flex; justify-content: space-between; align-items: center; }
+        .back-link { display: flex; align-items: center; gap: 0.5rem; color: var(--accent-primary); text-decoration: none; font-weight: 500; transition: all 0.3s ease; }
+        .back-link:hover { gap: 0.75rem; }
+        .logo { font-family: 'JetBrains Mono', monospace; font-size: 1.25rem; font-weight: 700; background: var(--gradient-1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .project-hero { padding: 4rem 0; border-bottom: 1px solid var(--border); }
+        .project-meta { display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+        .project-tag { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; padding: 0.35rem 0.75rem; border-radius: 20px; background: rgba(0, 217, 255, 0.1); color: var(--accent-primary); border: 1px solid rgba(0, 217, 255, 0.3); }
+        .project-tag.industry { background: rgba(0, 255, 136, 0.1); color: var(--accent-secondary); border-color: rgba(0, 255, 136, 0.3); }
+        h1 { font-size: 3rem; font-weight: 700; margin-bottom: 1.5rem; line-height: 1.2; }
+        h1 .highlight { background: var(--gradient-2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .project-intro { font-size: 1.25rem; color: var(--text-secondary); max-width: 800px; line-height: 1.8; }
+        .content-section { padding: 4rem 0; border-bottom: 1px solid var(--border); }
+        .content-section:last-child { border-bottom: none; }
+        h2 { font-size: 1.75rem; margin-bottom: 1.5rem; color: var(--text-primary); }
+        h2 .section-number { color: var(--accent-primary); font-family: 'JetBrains Mono', monospace; margin-right: 0.5rem; }
+        h3 { font-size: 1.25rem; margin: 2rem 0 1rem; color: var(--accent-secondary); }
+        p { color: var(--text-secondary); margin-bottom: 1rem; line-height: 1.8; }
+        .architecture-diagram { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 2rem; margin: 2rem 0; overflow-x: auto; }
+        .architecture-diagram pre { font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--accent-primary); line-height: 1.4; margin: 0; }
+        .tech-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 2rem 0; }
+        .tech-item { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem; transition: all 0.3s ease; }
+        .tech-item:hover { border-color: var(--accent-primary); transform: translateY(-2px); }
+        .tech-item h4 { font-size: 0.875rem; color: var(--accent-secondary); margin-bottom: 0.5rem; font-family: 'JetBrains Mono', monospace; }
+        .tech-item p { font-size: 0.9rem; margin: 0; }
+        ul { list-style: none; margin: 1rem 0; }
+        ul li { color: var(--text-secondary); padding-left: 1.5rem; margin-bottom: 0.75rem; position: relative; }
+        ul li::before { content: '>'; position: absolute; left: 0; color: var(--accent-primary); font-family: 'JetBrains Mono', monospace; font-weight: bold; }
+        .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1.5rem; margin: 2rem 0; }
+        .metric-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; text-align: center; }
+        .metric-value { font-size: 2.5rem; font-weight: 700; background: var(--gradient-2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-family: 'JetBrains Mono', monospace; }
+        .metric-label { font-size: 0.875rem; color: var(--text-tertiary); margin-top: 0.5rem; }
+        .code-block { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; margin: 1.5rem 0; overflow-x: auto; }
+        .code-block code { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: var(--text-primary); }
+        .code-label { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--accent-secondary); margin-bottom: 0.75rem; display: block; }
+        footer { background: var(--bg-secondary); border-top: 1px solid var(--border); padding: 2rem 0; text-align: center; margin-top: 4rem; }
+        footer p { color: var(--text-tertiary); font-size: 0.9rem; margin: 0; }
+        @media (max-width: 768px) { h1 { font-size: 2rem; } .architecture-diagram pre { font-size: 0.65rem; } .metric-value { font-size: 2rem; } }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="../index.html" class="back-link"><span>&larr;</span> Back to Portfolio</a>
+                <div class="logo">&lt;ABHINAV/&gt;</div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="project-hero">
+            <div class="container">
+                <div class="project-meta">
+                    <span class="project-tag">Snowflake</span>
+                    <span class="project-tag">dbt</span>
+                    <span class="project-tag">Airflow</span>
+                    <span class="project-tag industry">Healthcare Provider</span>
+                </div>
+                <h1>Modern <span class="highlight">Cloud Data Warehouse</span></h1>
+                <p class="project-intro">
+                    Led the migration from legacy on-premises data warehouse to a modern cloud-native analytics platform
+                    using Snowflake, dbt, and Apache Airflow. Implemented dimensional modeling best practices and
+                    analytics engineering workflows to support 500+ analysts and data scientists.
+                </p>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="container">
+                <h2><span class="section-number">01</span> Business Challenge</h2>
+                <p>
+                    The healthcare organization was running a 15-year-old on-premises data warehouse that could no longer
+                    meet growing analytics demands. Critical challenges included:
+                </p>
+                <ul>
+                    <li>Legacy Teradata system with escalating licensing costs exceeding $3M annually</li>
+                    <li>ETL pipelines taking 12+ hours leaving no time for reruns or error recovery</li>
+                    <li>No ability to scale compute for peak reporting periods (month-end, year-end)</li>
+                    <li>Data transformation logic embedded in stored procedures with no version control</li>
+                    <li>Limited documentation and tribal knowledge making changes risky</li>
+                    <li>Growing demand for self-service analytics and data science capabilities</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="container">
+                <h2><span class="section-number">02</span> Solution Architecture</h2>
+                <p>
+                    Designed a modern analytics stack with Snowflake as the cloud data warehouse,
+                    dbt for transformation layer implementing analytics engineering best practices,
+                    and Apache Airflow for orchestration. The architecture follows ELT patterns with
+                    clear separation of concerns.
+                </p>
+
+                <div class="architecture-diagram">
+                    <pre>
++--------------------------------------------------------------------------------------------------+
+|                            MODERN CLOUD DATA WAREHOUSE ARCHITECTURE                               |
++--------------------------------------------------------------------------------------------------+
+|                                                                                                    |
+|  DATA SOURCES                    INGESTION (EL)                      TRANSFORMATION (T)           |
+|  +----------------+              +------------------+                +----------------------+     |
+|  | Epic EHR       |              |                  |                |                      |     |
+|  +----------------+              |  Fivetran        |                |      dbt Core        |     |
+|  | Claims System  |------------->|  - CDC Sync      |                |                      |     |
+|  +----------------+              |  - Full Refresh  |                |  +----------------+  |     |
+|  | Lab Systems    |              |  - Schema Drift  |                |  | Staging        |  |     |
+|  +----------------+              +--------+---------+                |  | - Source Tests |  |     |
+|  | Billing        |                       |                          |  | - Dedup        |  |     |
+|  +----------------+                       v                          |  +-------+--------+  |     |
+|  | Reference Data |              +------------------+                |          |           |     |
+|  +----------------+              |   SNOWFLAKE      |                |          v           |     |
+|         |                        |                  |                |  +----------------+  |     |
+|         |                        |  +-----------+   |                |  | Intermediate   |  |     |
+|         +----------------------->|  | RAW       |   |--------------->|  | - Business     |  |     |
+|                                  |  | DATABASE  |   |                |  |   Logic        |  |     |
+|  +----------------+              |  +-----------+   |                |  | - Joins        |  |     |
+|  | Files (S3)     |              |                  |                |  +-------+--------+  |     |
+|  | - CSV          |------------->|  +-----------+   |                |          |           |     |
+|  | - JSON         |   Snowpipe   |  | STAGING   |   |                |          v           |     |
+|  | - Parquet      |              |  | DATABASE  |   |                |  +----------------+  |     |
+|  +----------------+              |  +-----------+   |                |  | Marts          |  |     |
+|                                  |                  |                |  | - Dimensional  |  |     |
+|                                  |  +-----------+   |<---------------|  | - Facts/Dims   |  |     |
+|                                  |  | ANALYTICS |   |                |  | - Aggregates   |  |     |
+|                                  |  | DATABASE  |   |                |  +----------------+  |     |
+|                                  |  +-----------+   |                |                      |     |
+|                                  +------------------+                +----------------------+     |
+|                                                                                                    |
+|  ORCHESTRATION                              CONSUMPTION                    GOVERNANCE             |
+|  +----------------------+          +------------------+            +------------------+           |
+|  |  Apache Airflow      |          | Tableau          |            | dbt Docs         |           |
+|  |  - DAG Scheduling    |          | - Dashboards     |            | - Lineage        |           |
+|  |  - Dependencies      |          | - Self-Service   |            | - Data Dict      |           |
+|  |  - Alerting          |          +------------------+            +------------------+           |
+|  |  - dbt Cloud API     |          | Looker           |            | Snowflake        |           |
+|  +----------------------+          | - Semantic Layer |            | - Access Control |           |
+|                                    +------------------+            | - Data Masking   |           |
+|  +----------------------+          | Python/R         |            | - Audit Logs     |           |
+|  |  GitHub Actions      |          | - Data Science   |            +------------------+           |
+|  |  - CI/CD             |          | - ML Workloads   |            | Great            |           |
+|  |  - dbt Tests         |          +------------------+            | Expectations     |           |
+|  |  - SQLFluff          |                                          | - Data Quality   |           |
+|  +----------------------+                                          +------------------+           |
+|                                                                                                    |
++--------------------------------------------------------------------------------------------------+
+                    </pre>
+                </div>
+
+                <h3>dbt Project Structure</h3>
+                <div class="code-block">
+                    <span class="code-label">// dbt Project Organization</span>
+                    <code><pre>
+healthcare_analytics/
+├── dbt_project.yml
+├── packages.yml
+├── profiles.yml
+├── models/
+│   ├── staging/
+│   │   ├── epic/
+│   │   │   ├── _epic__sources.yml
+│   │   │   ├── _epic__models.yml
+│   │   │   ├── stg_epic__patients.sql
+│   │   │   ├── stg_epic__encounters.sql
+│   │   │   └── stg_epic__diagnoses.sql
+│   │   └── claims/
+│   │       ├── stg_claims__transactions.sql
+│   │       └── stg_claims__adjustments.sql
+│   ├── intermediate/
+│   │   ├── int_patient_encounters.sql
+│   │   └── int_claims_denormalized.sql
+│   └── marts/
+│       ├── core/
+│       │   ├── dim_patients.sql
+│       │   ├── dim_providers.sql
+│       │   ├── dim_facilities.sql
+│       │   └── fct_encounters.sql
+│       ├── finance/
+│       │   ├── fct_claims.sql
+│       │   └── fct_revenue.sql
+│       └── quality/
+│           └── fct_quality_measures.sql
+├── tests/
+├── macros/
+├── seeds/
+└── snapshots/</pre></code>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="container">
+                <h2><span class="section-number">03</span> Technical Implementation</h2>
+
+                <h3>dbt Dimensional Model</h3>
+                <div class="code-block">
+                    <span class="code-label">// dim_patients.sql - SCD Type 2 Patient Dimension</span>
+                    <code><pre>
+{{
+    config(
+        materialized='incremental',
+        unique_key='patient_sk',
+        on_schema_change='sync_all_columns'
+    )
+}}
+
+with source as (
+    select * from {{ ref('stg_epic__patients') }}
+),
+
+transformed as (
+    select
+        {{ dbt_utils.generate_surrogate_key(['patient_id', 'effective_date']) }} as patient_sk,
+        patient_id,
+        medical_record_number,
+        first_name,
+        last_name,
+        date_of_birth,
+        gender,
+        race,
+        ethnicity,
+        primary_language,
+        marital_status,
+        -- Address handling with PII masking
+        {{ mask_pii('address_line_1') }} as address_line_1,
+        city,
+        state,
+        {{ mask_zip('zip_code') }} as zip_code,
+        -- Insurance info
+        primary_insurance_id,
+        primary_insurance_name,
+        -- SCD Type 2 fields
+        effective_date,
+        {{ dbt_utils.current_timestamp() }} as loaded_at,
+        case when lead(effective_date) over (
+            partition by patient_id order by effective_date
+        ) is null then true else false end as is_current
+    from source
+)
+
+select * from transformed
+{% if is_incremental() %}
+    where loaded_at > (select max(loaded_at) from {{ this }})
+{% endif %}</pre></code>
+                </div>
+
+                <h3>dbt Data Quality Tests</h3>
+                <div class="code-block">
+                    <span class="code-label">// _core__models.yml - Schema Tests</span>
+                    <code><pre>
+version: 2
+
+models:
+  - name: fct_encounters
+    description: "Healthcare encounter fact table at the grain of one row per patient encounter"
+    columns:
+      - name: encounter_sk
+        description: "Surrogate key for the encounter"
+        tests:
+          - unique
+          - not_null
+
+      - name: patient_sk
+        description: "Foreign key to dim_patients"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_patients')
+              field: patient_sk
+
+      - name: encounter_date
+        description: "Date of the encounter"
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: "'2010-01-01'"
+              max_value: "current_date()"
+
+      - name: total_charges
+        description: "Total charges for the encounter"
+        tests:
+          - dbt_utils.accepted_range:
+              min_value: 0
+              max_value: 10000000</pre></code>
+                </div>
+
+                <h3>Airflow Orchestration</h3>
+                <div class="code-block">
+                    <span class="code-label">// dbt_daily_dag.py - Airflow DAG</span>
+                    <code><pre>
+from airflow import DAG
+from airflow.operators.bash import BashOperator
+from airflow.providers.slack.operators.slack_webhook import SlackWebhookOperator
+from datetime import datetime, timedelta
+
+default_args = {
+    'owner': 'data-engineering',
+    'depends_on_past': False,
+    'retries': 2,
+    'retry_delay': timedelta(minutes=5),
+}
+
+with DAG(
+    'dbt_daily_transformation',
+    default_args=default_args,
+    schedule_interval='0 6 * * *',
+    start_date=datetime(2024, 1, 1),
+    catchup=False,
+    tags=['dbt', 'analytics']
+) as dag:
+
+    dbt_deps = BashOperator(
+        task_id='dbt_deps',
+        bash_command='cd /opt/airflow/dbt && dbt deps'
+    )
+
+    dbt_run_staging = BashOperator(
+        task_id='dbt_run_staging',
+        bash_command='cd /opt/airflow/dbt && dbt run --select staging'
+    )
+
+    dbt_run_marts = BashOperator(
+        task_id='dbt_run_marts',
+        bash_command='cd /opt/airflow/dbt && dbt run --select marts'
+    )
+
+    dbt_test = BashOperator(
+        task_id='dbt_test',
+        bash_command='cd /opt/airflow/dbt && dbt test'
+    )
+
+    notify_success = SlackWebhookOperator(
+        task_id='notify_success',
+        message='dbt daily run completed successfully',
+        trigger_rule='all_success'
+    )
+
+    dbt_deps >> dbt_run_staging >> dbt_run_marts >> dbt_test >> notify_success</pre></code>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="container">
+                <h2><span class="section-number">04</span> Technology Stack</h2>
+                <div class="tech-grid">
+                    <div class="tech-item">
+                        <h4>SNOWFLAKE</h4>
+                        <p>Cloud data warehouse with separation of storage and compute for elastic scaling</p>
+                    </div>
+                    <div class="tech-item">
+                        <h4>dbt CORE</h4>
+                        <p>Analytics engineering framework for modular, tested, documented transformations</p>
+                    </div>
+                    <div class="tech-item">
+                        <h4>APACHE AIRFLOW</h4>
+                        <p>Workflow orchestration platform for scheduling and monitoring data pipelines</p>
+                    </div>
+                    <div class="tech-item">
+                        <h4>FIVETRAN</h4>
+                        <p>Automated data integration platform for reliable EL pipelines</p>
+                    </div>
+                    <div class="tech-item">
+                        <h4>GITHUB ACTIONS</h4>
+                        <p>CI/CD for automated testing, linting, and deployment of dbt projects</p>
+                    </div>
+                    <div class="tech-item">
+                        <h4>GREAT EXPECTATIONS</h4>
+                        <p>Data quality framework for validation and profiling</p>
+                    </div>
+                    <div class="tech-item">
+                        <h4>TABLEAU</h4>
+                        <p>Business intelligence platform for dashboards and self-service analytics</p>
+                    </div>
+                    <div class="tech-item">
+                        <h4>TERRAFORM</h4>
+                        <p>Infrastructure as Code for Snowflake resource management</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="container">
+                <h2><span class="section-number">05</span> Results & Impact</h2>
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-value">75%</div>
+                        <div class="metric-label">TCO Reduction</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">12hr</div>
+                        <div class="metric-label">to 45min ETL Time</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">500+</div>
+                        <div class="metric-label">Active Analysts</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">250+</div>
+                        <div class="metric-label">dbt Models</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">98%</div>
+                        <div class="metric-label">Test Coverage</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">100%</div>
+                        <div class="metric-label">Documentation</div>
+                    </div>
+                </div>
+
+                <h3>Business Outcomes</h3>
+                <ul>
+                    <li>Reduced total cost of ownership by 75% compared to legacy Teradata environment</li>
+                    <li>Transformation time reduced from 12 hours to 45 minutes with incremental processing</li>
+                    <li>Enabled self-service analytics for 500+ analysts with proper data governance</li>
+                    <li>Complete data lineage and documentation through dbt docs and catalog</li>
+                    <li>Achieved HIPAA compliance with row-level security and dynamic data masking</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="container">
+                <h2><span class="section-number">06</span> Key Learnings</h2>
+                <ul>
+                    <li>dbt's modular approach enables analytics engineering at scale with proper testing</li>
+                    <li>Snowflake's separation of compute and storage is game-changing for cost optimization</li>
+                    <li>Investing in CI/CD for dbt projects prevents regressions and improves team velocity</li>
+                    <li>Data contracts between source systems and warehouse are essential for reliability</li>
+                    <li>Dimensional modeling fundamentals remain crucial even in modern data stacks</li>
+                </ul>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Abhinav Verma - Lead Data Engineer</p>
+        </div>
+    </footer>
+</body>
+</html>

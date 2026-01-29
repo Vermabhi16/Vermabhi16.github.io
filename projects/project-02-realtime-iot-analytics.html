@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time IoT Analytics Platform - Abhinav Verma</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0e17;
+            --bg-secondary: #131824;
+            --bg-card: #1a1f2e;
+            --accent-primary: #00d9ff;
+            --accent-secondary: #00ff88;
+            --text-primary: #e8eaed;
+            --text-secondary: #9ca3af;
+            --text-tertiary: #6b7280;
+            --border: #2d3748;
+            --gradient-1: linear-gradient(135deg, #00d9ff 0%, #0066ff 100%);
+            --gradient-2: linear-gradient(135deg, #00ff88 0%, #00d9ff 100%);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Outfit', sans-serif; background: var(--bg-primary); color: var(--text-primary); line-height: 1.6; overflow-x: hidden; }
+        body::before { content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: linear-gradient(rgba(0, 217, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 217, 255, 0.03) 1px, transparent 1px); background-size: 50px 50px; z-index: 0; pointer-events: none; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; position: relative; z-index: 1; }
+        header { padding: 1.5rem 0; border-bottom: 1px solid var(--border); background: rgba(10, 14, 23, 0.95); backdrop-filter: blur(10px); position: sticky; top: 0; z-index: 100; }
+        .header-content { display: flex; justify-content: space-between; align-items: center; }
+        .back-link { display: flex; align-items: center; gap: 0.5rem; color: var(--accent-primary); text-decoration: none; font-weight: 500; transition: all 0.3s ease; }
+        .back-link:hover { gap: 0.75rem; }
+        .logo { font-family: 'JetBrains Mono', monospace; font-size: 1.25rem; font-weight: 700; background: var(--gradient-1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .project-hero { padding: 4rem 0; border-bottom: 1px solid var(--border); }
+        .project-meta { display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+        .project-tag { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; padding: 0.35rem 0.75rem; border-radius: 20px; background: rgba(0, 217, 255, 0.1); color: var(--accent-primary); border: 1px solid rgba(0, 217, 255, 0.3); }
+        .project-tag.industry { background: rgba(0, 255, 136, 0.1); color: var(--accent-secondary); border-color: rgba(0, 255, 136, 0.3); }
+        h1 { font-size: 3rem; font-weight: 700; margin-bottom: 1.5rem; line-height: 1.2; }
+        h1 .highlight { background: var(--gradient-2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .project-intro { font-size: 1.25rem; color: var(--text-secondary); max-width: 800px; line-height: 1.8; }
+        .content-section { padding: 4rem 0; border-bottom: 1px solid var(--border); }
+        .content-section:last-child { border-bottom: none; }
+        h2 { font-size: 1.75rem; margin-bottom: 1.5rem; color: var(--text-primary); }
+        h2 .section-number { color: var(--accent-primary); font-family: 'JetBrains Mono', monospace; margin-right: 0.5rem; }
+        h3 { font-size: 1.25rem; margin: 2rem 0 1rem; color: var(--accent-secondary); }
+        p { color: var(--text-secondary); margin-bottom: 1rem; line-height: 1.8; }
+        .architecture-diagram { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 2rem; margin: 2rem 0; overflow-x: auto; }
+        .architecture-diagram pre { font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--accent-primary); line-height: 1.4; margin: 0; }
+        .tech-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 2rem 0; }
+        .tech-item { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem; transition: all 0.3s ease; }
+        .tech-item:hover { border-color: var(--accent-primary); transform: translateY(-2px); }
+        .tech-item h4 { font-size: 0.875rem; color: var(--accent-secondary); margin-bottom: 0.5rem; font-family: 'JetBrains Mono', monospace; }
+        .tech-item p { font-size: 0.9rem; margin: 0; }
+        ul { list-style: none; margin: 1rem 0; }
+        ul li { color: var(--text-secondary); padding-left: 1.5rem; margin-bottom: 0.75rem; position: relative; }
+        ul li::before { content: '>'; position: absolute; left: 0; color: var(--accent-primary); font-family: 'JetBrains Mono', monospace; font-weight: bold; }
+        .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1.5rem; margin: 2rem 0; }
+        .metric-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; text-align: center; }
+        .metric-value { font-size: 2.5rem; font-weight: 700; background: var(--gradient-2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-family: 'JetBrains Mono', monospace; }
+        .metric-label { font-size: 0.875rem; color: var(--text-tertiary); margin-top: 0.5rem; }
+        .code-block { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; margin: 1.5rem 0; overflow-x: auto; }
+        .code-block code { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: var(--text-primary); }
+        .code-label { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--accent-secondary); margin-bottom: 0.75rem; display: block; }
+        footer { background: var(--bg-secondary); border-top: 1px solid var(--border); padding: 2rem 0; text-align: center; margin-top: 4rem; }
+        footer p { color: var(--text-tertiary); font-size: 0.9rem; margin: 0; }
+        @media (max-width: 768px) { h1 { font-size: 2rem; } .architecture-diagram pre { font-size: 0.65rem; } .metric-value { font-size: 2rem; } }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="../index.html" class="back-link"><span>&larr;</span> Back to Portfolio</a>
+                <div class="logo">&lt;ABHINAV/&gt;</div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="project-hero">
+            <div class="container">
+                <div class="project-meta">
+                    <span class="project-tag">IoT</span>
+                    <span class="project-tag">Real-Time</span>
+                    <span class="project-tag">Azure</span>
+                    <span class="project-tag industry">Global Manufacturing</span>
+                </div>
+                <h1>Real-Time <span class="highlight">IoT Analytics Platform</span></h1>
+                <p class="project-intro">
+                    Architected and delivered an end-to-end IoT analytics platform processing 500 million events daily
+                    from 10,000+ industrial sensors across 25 manufacturing facilities, enabling predictive maintenance,
+                    quality monitoring, and operational optimization in real-time.
+                </p>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="container">
+                <h2><span class="section-number">01</span> Business Challenge</h2>
+                <p>
+                    The manufacturing client operated 25 facilities globally with critical industrial equipment requiring
+                    continuous monitoring. The existing system had significant limitations:
+                </p>
+                <ul>
+                    <li>Reactive maintenance approach leading to $50M+ annual unplanned downtime costs</li>
+                    <li>No visibility into equipment health until failure occurred</li>
+                    <li>Data from sensors collected in batch mode with 24-hour delays</li>
+                    <li>Quality defects detected only at end-of-line inspection</li>
+                    <li>Siloed data across facilities with no centralized analytics</li>
+                    <li>No capability for predictive maintenance or anomaly detection</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="container">
+                <h2><span class="section-number">02</span> Solution Architecture</h2>
+                <p>
+                    Designed a cloud-native IoT platform leveraging Azure IoT Hub for device connectivity,
+                    Azure Stream Analytics for real-time processing, and Databricks for advanced analytics
+                    and machine learning model deployment.
+                </p>
+
+                <div class="architecture-diagram">
+                    <pre>
++--------------------------------------------------------------------------------------------------+
+|                                REAL-TIME IoT ANALYTICS PLATFORM                                   |
++--------------------------------------------------------------------------------------------------+
+|                                                                                                    |
+|  EDGE LAYER                          INGESTION                           STREAM PROCESSING        |
+|  +------------------+                +------------------+                +-------------------+    |
+|  | Industrial       |                |                  |                |                   |    |
+|  | Sensors (10K+)   |                |  Azure IoT Hub   |                | Azure Stream      |    |
+|  | - Temperature    |----+           |  - Device Mgmt   |                | Analytics         |    |
+|  | - Pressure       |    |           |  - Routing       |                | - Windowing       |    |
+|  | - Vibration      |    +---------->|  - Protocols     |--------------->| - Aggregations    |    |
+|  | - Current        |    |           |    (MQTT/AMQP)   |                | - Anomaly Detect  |    |
+|  | - Flow Rate      |    |           |  - Scaling       |                | - Pattern Match   |    |
+|  +------------------+    |           +------------------+                +--------+----------+    |
+|                          |                    |                                   |               |
+|  +------------------+    |                    |                                   |               |
+|  | Azure IoT Edge   |----+                    v                                   |               |
+|  | - Local Process  |           +------------------+                              |               |
+|  | - Store Forward  |           |  Event Hubs      |                              |               |
+|  | - ML at Edge     |           |  (Buffer)        |                              |               |
+|  +------------------+           +------------------+                              |               |
+|                                          |                                        |               |
+|                                          v                                        v               |
+|  HOT PATH                       WARM PATH                              COLD PATH                  |
+|  +------------------+          +------------------+                   +-------------------+       |
+|  | Azure Functions  |          | Databricks       |                   | ADLS Gen2         |       |
+|  | - Alerting       |          | Structured       |                   | - Raw Telemetry   |       |
+|  | - Threshold      |          | Streaming        |                   | - Historical      |       |
+|  | - Notifications  |          | - Enrichment     |                   | - Delta Lake      |       |
+|  +--------+---------+          | - Aggregation    |                   +--------+----------+       |
+|           |                    +--------+---------+                            |                  |
+|           v                             |                                      v                  |
+|  +------------------+                   |                           +-------------------+         |
+|  | Azure SignalR    |                   |                           | Databricks ML     |         |
+|  | - Real-time      |                   v                           | - Predictive      |         |
+|  |   Dashboards     |          +------------------+                 |   Maintenance     |         |
+|  +------------------+          | Cosmos DB        |                 | - Anomaly Models  |         |
+|                                | - Time Series    |                 | - Quality Predict |         |
+|                                | - Equipment State|                 +-------------------+         |
+|                                +------------------+                                               |
+|                                                                                                    |
+|  VISUALIZATION & ACTION                                                                           |
+|  +------------------+  +------------------+  +------------------+  +------------------+           |
+|  | Power BI         |  | Azure Digital    |  | Logic Apps       |  | Teams/ServiceNow |           |
+|  | - Live Dashboard |  | Twins            |  | - Workflows      |  | - Incident Mgmt  |           |
+|  | - KPI Monitoring |  | - 3D Facility    |  | - Escalations    |  | - Notifications  |           |
+|  +------------------+  +------------------+  +------------------+  +------------------+           |
+|                                                                                                    |
++--------------------------------------------------------------------------------------------------+
+                    </pre>
+                </div>
+
+                <h3>Key Architectural Decisions</h3>
+                <ul>
+                    <li>Lambda architecture with hot, warm, and cold paths for different latency requirements</li>
+                    <li>Azure IoT Edge for edge computing and local processing during connectivity issues</li>
+                    <li>Cosmos DB with time-series optimized partition strategy for equipment state</li>
+                    <li>Azure Digital Twins for digital representation of physical manufacturing environment</li>
+                    <li>MLflow on Databricks for model versioning and deployment lifecycle management</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="container">
+                <h2><span class="section-number">03</span> Technical Implementation</h2>
+
+                <h3>Stream Analytics Processing</h3>
+                <div class="code-block">
+                    <span class="code-label">// Azure Stream Analytics - Anomaly Detection Query</span>
+                    <code><pre>
+WITH AnomalyDetection AS (
+    SELECT
+        IoTHub.ConnectionDeviceId AS DeviceId,
+        System.Timestamp() AS EventTime,
+        temperature,
+        vibration,
+        pressure,
+        AnomalyDetection_SpikeAndDip(temperature, 95, 120, 'spikesanddips')
+            OVER(LIMIT DURATION(second, 120)) AS TempAnomaly,
+        AnomalyDetection_SpikeAndDip(vibration, 90, 60, 'spikesanddips')
+            OVER(LIMIT DURATION(second, 60)) AS VibrationAnomaly
+    FROM IoTHubInput TIMESTAMP BY EventEnqueuedUtcTime
+)
+SELECT
+    DeviceId,
+    EventTime,
+    temperature,
+    vibration,
+    CAST(TempAnomaly.Score AS float) AS TempAnomalyScore,
+    CAST(VibrationAnomaly.Score AS float) AS VibrationAnomalyScore
+INTO AlertOutput
+FROM AnomalyDetection
+WHERE TempAnomaly.IsAnomaly = 1 OR VibrationAnomaly.IsAnomaly = 1</pre></code>
+                </div>
+
+                <h3>Databricks Streaming Pipeline</h3>
+                <div class="code-block">
+                    <span class="code-label">// PySpark - Structured Streaming with Delta Lake</span>
+                    <code><pre>
+from pyspark.sql.functions import *
+from pyspark.sql.types import *
+
+# Read from Event Hubs
+iot_stream = (spark.readStream
+    .format("eventhubs")
+    .options(**eventhub_conf)
+    .load()
+    .select(
+        get_json_object(col("body").cast("string"), "$.deviceId").alias("device_id"),
+        get_json_object(col("body").cast("string"), "$.temperature").cast("double").alias("temperature"),
+        get_json_object(col("body").cast("string"), "$.vibration").cast("double").alias("vibration"),
+        col("enqueuedTime").alias("event_time")
+    ))
+
+# Enrich with device metadata
+device_metadata = spark.table("silver.device_registry")
+
+enriched_stream = (iot_stream
+    .withWatermark("event_time", "10 minutes")
+    .join(device_metadata, "device_id")
+    .groupBy(
+        window("event_time", "5 minutes", "1 minute"),
+        "device_id",
+        "facility_id",
+        "equipment_type"
+    )
+    .agg(
+        avg("temperature").alias("avg_temp"),
+        max("temperature").alias("max_temp"),
+        avg("vibration").alias("avg_vibration"),
+        stddev("vibration").alias("vibration_stddev")
+    ))
+
+# Write to Delta Lake
+(enriched_stream.writeStream
+    .format("delta")
+    .outputMode("append")
+    .option("checkpointLocation", "/checkpoints/iot_aggregates")
+    .trigger(processingTime="30 seconds")
+    .toTable("gold.equipment_telemetry_5min"))</pre></code>
+                </div>
+
+                <h3>Predictive Maintenance Model</h3>
+                <div class="code-block">
+                    <span class="code-label">// MLflow - Model Training and Registration</span>
+                    <code><pre>
+import mlflow
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
+
+with mlflow.start_run(run_name="predictive_maintenance_v2"):
+    # Feature engineering from telemetry data
+    features = spark.sql("""
+        SELECT
+            device_id,
+            avg_temp_7d, max_temp_7d, temp_trend,
+            avg_vibration_7d, vibration_variance,
+            operating_hours, days_since_maintenance,
+            failure_label
+        FROM gold.equipment_features
+    """).toPandas()
+
+    X_train, X_test, y_train, y_test = train_test_split(
+        features.drop(['device_id', 'failure_label'], axis=1),
+        features['failure_label'], test_size=0.2
+    )
+
+    model = RandomForestClassifier(n_estimators=100, max_depth=10)
+    model.fit(X_train, y_train)
+
+    mlflow.log_metric("accuracy", model.score(X_test, y_test))
+    mlflow.sklearn.log_model(model, "predictive_maintenance_model")
+    mlflow.register_model(
+        f"runs:/{mlflow.active_run().info.run_id}/predictive_maintenance_model",
+        "PredictiveMaintenanceModel"
+    )</pre></code>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="container">
+                <h2><span class="section-number">04</span> Technology Stack</h2>
+                <div class="tech-grid">
+                    <div class="tech-item">
+                        <h4>AZURE IoT HUB</h4>
+                        <p>Managed service for bi-directional communication with millions of IoT devices</p>
+                    </div>
+                    <div class="tech-item">
+                        <h4>AZURE IoT EDGE</h4>
+                        <p>Edge computing runtime for local processing and AI at the edge</p>
+                    </div>
+                    <div class="tech-item">
+                        <h4>STREAM ANALYTICS</h4>
+                        <p>Real-time analytics service with built-in anomaly detection</p>
+                    </div>
+                    <div class="tech-item">
+                        <h4>EVENT HUBS</h4>
+                        <p>Big data streaming platform for high-throughput event ingestion</p>
+                    </div>
+                    <div class="tech-item">
+                        <h4>COSMOS DB</h4>
+                        <p>Globally distributed, multi-model database for time-series data</p>
+                    </div>
+                    <div class="tech-item">
+                        <h4>DATABRICKS</h4>
+                        <p>Unified analytics and ML platform for batch and streaming workloads</p>
+                    </div>
+                    <div class="tech-item">
+                        <h4>AZURE DIGITAL TWINS</h4>
+                        <p>Digital representation of physical environments and assets</p>
+                    </div>
+                    <div class="tech-item">
+                        <h4>POWER BI</h4>
+                        <p>Real-time dashboards with DirectQuery to streaming datasets</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="container">
+                <h2><span class="section-number">05</span> Results & Impact</h2>
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-value">500M</div>
+                        <div class="metric-label">Events/Day Processed</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">&lt;5s</div>
+                        <div class="metric-label">End-to-End Latency</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">73%</div>
+                        <div class="metric-label">Unplanned Downtime Reduction</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">$35M</div>
+                        <div class="metric-label">Annual Cost Savings</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">10K+</div>
+                        <div class="metric-label">Connected Devices</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">92%</div>
+                        <div class="metric-label">Prediction Accuracy</div>
+                    </div>
+                </div>
+
+                <h3>Business Outcomes</h3>
+                <ul>
+                    <li>Reduced unplanned equipment downtime by 73% through predictive maintenance</li>
+                    <li>Achieved $35M annual savings from prevented equipment failures and optimized maintenance</li>
+                    <li>Real-time quality monitoring reduced defect rates by 45%</li>
+                    <li>Edge computing enabled operations to continue during network outages</li>
+                    <li>Centralized visibility across 25 facilities enabled best practice sharing</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="container">
+                <h2><span class="section-number">06</span> Key Learnings</h2>
+                <ul>
+                    <li>Edge computing is essential for industrial IoT - network latency and reliability are critical</li>
+                    <li>Schema evolution in streaming systems requires careful planning with Event Hubs schema registry</li>
+                    <li>Cosmos DB partition key design is crucial for time-series query performance</li>
+                    <li>ML model monitoring in production requires dedicated infrastructure for drift detection</li>
+                    <li>Close collaboration with OT (Operational Technology) teams is essential for sensor integration</li>
+                </ul>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Abhinav Verma - Lead Data Engineer</p>
+        </div>
+    </footer>
+</body>
+</html>

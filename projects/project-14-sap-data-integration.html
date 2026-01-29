@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAP Enterprise Data Integration - Abhinav Verma</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg-primary: #0a0e17; --bg-secondary: #131824; --bg-card: #1a1f2e; --accent-primary: #00d9ff; --accent-secondary: #00ff88; --text-primary: #e8eaed; --text-secondary: #9ca3af; --text-tertiary: #6b7280; --border: #2d3748; --gradient-1: linear-gradient(135deg, #00d9ff 0%, #0066ff 100%); --gradient-2: linear-gradient(135deg, #00ff88 0%, #00d9ff 100%); }
+        * { margin: 0; padding: 0; box-sizing: border-box; } body { font-family: 'Outfit', sans-serif; background: var(--bg-primary); color: var(--text-primary); line-height: 1.6; } body::before { content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: linear-gradient(rgba(0, 217, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 217, 255, 0.03) 1px, transparent 1px); background-size: 50px 50px; z-index: 0; pointer-events: none; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; position: relative; z-index: 1; }
+        header { padding: 1.5rem 0; border-bottom: 1px solid var(--border); background: rgba(10, 14, 23, 0.95); backdrop-filter: blur(10px); position: sticky; top: 0; z-index: 100; } .header-content { display: flex; justify-content: space-between; align-items: center; } .back-link { display: flex; align-items: center; gap: 0.5rem; color: var(--accent-primary); text-decoration: none; } .logo { font-family: 'JetBrains Mono', monospace; font-size: 1.25rem; font-weight: 700; background: var(--gradient-1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .project-hero { padding: 4rem 0; border-bottom: 1px solid var(--border); } .project-meta { display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; } .project-tag { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; padding: 0.35rem 0.75rem; border-radius: 20px; background: rgba(0, 217, 255, 0.1); color: var(--accent-primary); border: 1px solid rgba(0, 217, 255, 0.3); } .project-tag.industry { background: rgba(0, 255, 136, 0.1); color: var(--accent-secondary); border-color: rgba(0, 255, 136, 0.3); }
+        h1 { font-size: 3rem; font-weight: 700; margin-bottom: 1.5rem; line-height: 1.2; } h1 .highlight { background: var(--gradient-2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; } .project-intro { font-size: 1.25rem; color: var(--text-secondary); max-width: 800px; line-height: 1.8; }
+        .content-section { padding: 4rem 0; border-bottom: 1px solid var(--border); } h2 { font-size: 1.75rem; margin-bottom: 1.5rem; } h2 .section-number { color: var(--accent-primary); font-family: 'JetBrains Mono', monospace; margin-right: 0.5rem; } h3 { font-size: 1.25rem; margin: 2rem 0 1rem; color: var(--accent-secondary); } p { color: var(--text-secondary); margin-bottom: 1rem; line-height: 1.8; }
+        .architecture-diagram { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 2rem; margin: 2rem 0; overflow-x: auto; } .architecture-diagram pre { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--accent-primary); line-height: 1.4; }
+        .tech-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 2rem 0; } .tech-item { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem; } .tech-item h4 { font-size: 0.875rem; color: var(--accent-secondary); margin-bottom: 0.5rem; font-family: 'JetBrains Mono', monospace; } .tech-item p { font-size: 0.9rem; margin: 0; }
+        ul { list-style: none; margin: 1rem 0; } ul li { color: var(--text-secondary); padding-left: 1.5rem; margin-bottom: 0.75rem; position: relative; } ul li::before { content: '>'; position: absolute; left: 0; color: var(--accent-primary); font-family: 'JetBrains Mono', monospace; }
+        .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1.5rem; margin: 2rem 0; } .metric-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; text-align: center; } .metric-value { font-size: 2.5rem; font-weight: 700; background: var(--gradient-2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-family: 'JetBrains Mono', monospace; } .metric-label { font-size: 0.875rem; color: var(--text-tertiary); margin-top: 0.5rem; }
+        .code-block { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; margin: 1.5rem 0; overflow-x: auto; } .code-block code { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: var(--text-primary); } .code-label { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--accent-secondary); margin-bottom: 0.75rem; display: block; }
+        footer { background: var(--bg-secondary); border-top: 1px solid var(--border); padding: 2rem 0; text-align: center; margin-top: 4rem; } footer p { color: var(--text-tertiary); font-size: 0.9rem; margin: 0; }
+        @media (max-width: 768px) { h1 { font-size: 2rem; } .architecture-diagram pre { font-size: 0.55rem; } .metric-value { font-size: 2rem; } }
+    </style>
+</head>
+<body>
+    <header><div class="container"><div class="header-content"><a href="../index.html" class="back-link"><span>&larr;</span> Back to Portfolio</a><div class="logo">&lt;ABHINAV/&gt;</div></div></div></header>
+    <main>
+        <section class="project-hero">
+            <div class="container">
+                <div class="project-meta">
+                    <span class="project-tag">SAP</span>
+                    <span class="project-tag">Azure</span>
+                    <span class="project-tag">ETL</span>
+                    <span class="project-tag industry">Manufacturing</span>
+                </div>
+                <h1>SAP Enterprise <span class="highlight">Data Integration</span></h1>
+                <p class="project-intro">
+                    Led a large-scale SAP BW and S/4HANA data integration project for a global manufacturing company,
+                    extracting 500+ tables and 10 years of historical data to Azure. The platform enables advanced
+                    analytics beyond SAP capabilities while maintaining real-time synchronization with source systems.
+                </p>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="container">
+                <h2><span class="section-number">01</span> Business Challenge</h2>
+                <ul>
+                    <li>SAP BW reports taking 4+ hours to run, blocking business decision-making</li>
+                    <li>No ability to join SAP data with non-SAP sources for comprehensive analytics</li>
+                    <li>SAP licensing costs increasing due to analytics workload on production</li>
+                    <li>Historical data retention limited by SAP storage costs</li>
+                    <li>Machine learning initiatives blocked by inability to access SAP data</li>
+                    <li>S/4HANA migration requiring parallel operation of analytics during transition</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="container">
+                <h2><span class="section-number">02</span> Solution Architecture</h2>
+                <div class="architecture-diagram">
+                    <pre>
++--------------------------------------------------------------------------------------------------------------+
+|                                    SAP DATA INTEGRATION PLATFORM                                              |
++--------------------------------------------------------------------------------------------------------------+
+|                                                                                                               |
+|  SAP SOURCE SYSTEMS                EXTRACTION LAYER                    AZURE DATA PLATFORM                   |
+|  +------------------+              +----------------------+            +------------------------+             |
+|  | SAP S/4HANA      |              | SAP SLT             |            |    ADLS GEN2           |             |
+|  | - Finance (FI)   |------------->| - Real-time CDC     |            |    (Bronze Layer)      |             |
+|  | - Controlling    |              | - Delta Replication |----------->| +------------------+   |             |
+|  | - Materials (MM) |              +----------------------+            | | Raw SAP Tables   |   |             |
+|  | - Sales (SD)     |                       |                          | | - Parquet Format |   |             |
+|  +------------------+                       |                          | | - Full History   |   |             |
+|         |                          +----------------------+            | +------------------+   |             |
+|         |                          | SAP BW Open Hub     |            +------------------------+             |
+|  +------------------+              | - InfoCube Extract  |                      |                             |
+|  | SAP BW/4HANA     |------------->| - DSO Export        |                      v                             |
+|  | - InfoCubes      |              | - Semantic Layer    |            +------------------------+             |
+|  | - DSOs           |              +----------------------+            |    DATABRICKS          |             |
+|  | - InfoProviders  |                       |                          | +------------------+   |             |
+|  +------------------+                       |                          | | Silver Layer     |   |             |
+|         |                          +----------------------+            | | - Cleansed       |   |             |
+|         |                          | Azure Data Factory  |----------->| | - Business Keys  |   |             |
+|  +------------------+              | - SAP Connectors    |            | | - Validated      |   |             |
+|  | SAP ECC          |------------->| - ODP Extraction    |            | +------------------+   |             |
+|  | - Legacy Tables  |              | - BAPI/RFC          |            | +------------------+   |             |
+|  | - Custom Z-tables|              +----------------------+            | | Gold Layer       |   |             |
+|  +------------------+                                                  | | - Star Schema    |   |             |
+|                                                                        | | - Aggregates     |   |             |
+|  ORCHESTRATION                     TRANSFORMATION                      | +------------------+   |             |
+|  +------------------+              +----------------------+            +------------------------+             |
+|  | Airflow          |              | dbt + PySpark        |                      |                            |
+|  | - SAP Load DAGs  |<------------>| - SAP Semantics      |                      v                            |
+|  | - Dependencies   |              | - Hierarchy Flatten  |            +------------------------+             |
+|  | - Retry Logic    |              | - Currency Convert   |            |    CONSUMPTION         |             |
+|  +------------------+              +----------------------+            | +------------------+   |             |
+|                                                                        | | Power BI         |   |             |
+|                                                                        | | SAP Analytics    |   |             |
+|                                                                        | | ML/AI Platform   |   |             |
+|                                                                        | +------------------+   |             |
+|                                                                        +------------------------+             |
++--------------------------------------------------------------------------------------------------------------+
+                    </pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="container">
+                <h2><span class="section-number">03</span> Technical Implementation</h2>
+                <h3>SAP Extraction Pipeline</h3>
+                <div class="code-block">
+                    <span class="code-label">// Azure Data Factory - SAP ODP Extraction</span>
+                    <code><pre>
+{
+  "name": "SAP_S4_Material_Extraction",
+  "properties": {
+    "activities": [
+      {
+        "name": "Extract_MARA",
+        "type": "Copy",
+        "inputs": [{
+          "referenceName": "SAP_S4_ODP",
+          "type": "DatasetReference",
+          "parameters": {
+            "extractorName": "2LIS_03_BF_MD",
+            "deltaMode": "delta"
+          }
+        }],
+        "outputs": [{
+          "referenceName": "ADLS_Bronze_Parquet",
+          "type": "DatasetReference",
+          "parameters": {
+            "tableName": "sap_mara",
+            "partition": "@formatDateTime(utcnow(),'yyyy/MM/dd')"
+          }
+        }],
+        "typeProperties": {
+          "source": {
+            "type": "SapOdpSource",
+            "extractionMode": "Delta",
+            "subscriberProcess": "ADF_PROD"
+          },
+          "sink": {
+            "type": "ParquetSink",
+            "formatSettings": {
+              "type": "ParquetWriteSettings"
+            }
+          }
+        }
+      }
+    ]
+  }
+}</pre></code>
+                </div>
+
+                <h3>SAP Hierarchy Flattening</h3>
+                <div class="code-block">
+                    <span class="code-label">// PySpark - Cost Center Hierarchy Flattening</span>
+                    <code><pre>
+def flatten_sap_hierarchy(hierarchy_df, node_col, parent_col, max_levels=10):
+    """Flatten SAP hierarchy structure to dimensional format"""
+
+    from pyspark.sql.functions import coalesce, lit
+
+    # Start with leaf nodes
+    result = hierarchy_df.select(
+        col(node_col).alias("node_id"),
+        col(parent_col).alias("parent_id"),
+        col("node_name").alias("level_0_name"),
+        col(node_col).alias("level_0_id")
+    )
+
+    # Iteratively join to get parent levels
+    for level in range(1, max_levels + 1):
+        parent_alias = f"p{level}"
+        result = result.join(
+            hierarchy_df.alias(parent_alias),
+            result["parent_id"] == col(f"{parent_alias}.{node_col}"),
+            "left"
+        ).select(
+            result["*"],
+            coalesce(col(f"{parent_alias}.{parent_col}"), lit(None)).alias("parent_id"),
+            col(f"{parent_alias}.node_name").alias(f"level_{level}_name"),
+            col(f"{parent_alias}.{node_col}").alias(f"level_{level}_id")
+        )
+
+    return result.drop("parent_id")</pre></code>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="container">
+                <h2><span class="section-number">04</span> Technology Stack</h2>
+                <div class="tech-grid">
+                    <div class="tech-item"><h4>SAP SLT</h4><p>Real-time replication for near-zero latency CDC from S/4HANA</p></div>
+                    <div class="tech-item"><h4>SAP ODP</h4><p>Operational Data Provisioning for standardized extraction</p></div>
+                    <div class="tech-item"><h4>AZURE DATA FACTORY</h4><p>SAP connectors for BAPI, RFC, ODP, and table extraction</p></div>
+                    <div class="tech-item"><h4>DATABRICKS</h4><p>Large-scale transformation and SAP semantic processing</p></div>
+                    <div class="tech-item"><h4>DELTA LAKE</h4><p>ACID transactions for reliable SAP data lake</p></div>
+                    <div class="tech-item"><h4>dbt</h4><p>SAP-specific transformations with business logic</p></div>
+                    <div class="tech-item"><h4>APACHE AIRFLOW</h4><p>Complex dependency management for SAP loads</p></div>
+                    <div class="tech-item"><h4>POWER BI</h4><p>SAP-connected dashboards replacing BW reports</p></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="container">
+                <h2><span class="section-number">05</span> Results & Impact</h2>
+                <div class="metrics-grid">
+                    <div class="metric-card"><div class="metric-value">500+</div><div class="metric-label">Tables Extracted</div></div>
+                    <div class="metric-card"><div class="metric-value">10 yrs</div><div class="metric-label">Historical Data</div></div>
+                    <div class="metric-card"><div class="metric-value">95%</div><div class="metric-label">Report Time Reduction</div></div>
+                    <div class="metric-card"><div class="metric-value">$2M</div><div class="metric-label">SAP License Savings</div></div>
+                    <div class="metric-card"><div class="metric-value">15 min</div><div class="metric-label">CDC Latency</div></div>
+                    <div class="metric-card"><div class="metric-value">Zero</div><div class="metric-label">Data Loss Incidents</div></div>
+                </div>
+                <h3>Business Outcomes</h3>
+                <ul>
+                    <li>Reports that took 4 hours now complete in minutes</li>
+                    <li>Cross-system analytics combining SAP and non-SAP data sources</li>
+                    <li>$2M annual savings in SAP analytics licensing costs</li>
+                    <li>ML models now have access to complete SAP transaction history</li>
+                    <li>S/4HANA migration supported with parallel analytics availability</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="container">
+                <h2><span class="section-number">06</span> Key Learnings</h2>
+                <ul>
+                    <li>SAP ODP is the preferred extraction method - avoid direct table access</li>
+                    <li>SLT provides best real-time performance but requires careful sizing</li>
+                    <li>SAP hierarchies must be flattened for dimensional modeling</li>
+                    <li>Currency and unit conversions are critical for accurate analytics</li>
+                    <li>SAP Basis team involvement is essential for extraction optimization</li>
+                </ul>
+            </div>
+        </section>
+    </main>
+    <footer><div class="container"><p>&copy; 2024 Abhinav Verma - Lead Data Engineer</p></div></footer>
+</body>
+</html>
